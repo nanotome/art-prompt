@@ -1,3 +1,4 @@
 [submodule "Libraries/SFML"]
 	path = Libraries/SFML
 	url = https://github.com/SFML/SFML.git
+	branch = 2.6.x

@@ -1,5 +1,5 @@
-#include <SFML/Window/Event.hpp>
-#include <SFML/Window/Window.hpp>
+#include "SFML/include/SFML/Window/Event.hpp"
+#include "SFML/include/SFML/Window/Window.hpp"
 
 int main()
 {
