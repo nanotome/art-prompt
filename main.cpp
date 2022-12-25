@@ -1,14 +1,36 @@
+
 #ifdef _WIN32
 #include <SDL.h>
 #else
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #endif
+#include <algorithm>
+#include <filesystem>
 #include <iostream>
+#include <iterator>
+#include <random>
+#include <string>
+#include <vector>
 
 int main()
 {
     bool quit = false;
+    std::vector<std::string> emojiPaths;
+    const std::filesystem::path emojis{ "../images/Emoji" };
+    for (const auto& entry : std::filesystem::directory_iterator{ emojis })
+    {
+        emojiPaths.push_back(entry.path());
+    }
+
+    std::random_device dev;
+    std::mt19937 randomness_generator(dev());
+    std::uniform_int_distribution<std::size_t> index_distribution(
+        0, emojiPaths.size());
+
+    auto i = index_distribution(randomness_generator);
+    const std::string randomEmoji = emojiPaths[i];
+
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
     {
         std::cout << "Error initializing SDL." << std::endl;
@@ -41,7 +63,7 @@ int main()
         return 1;
     }
 
-    SDL_Surface* image = IMG_Load("../images/Emoji/2763.png");
+    SDL_Surface* image = IMG_Load(randomEmoji.c_str());
     SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, image);
 
     SDL_Event sdlEvent;
