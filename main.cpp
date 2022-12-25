@@ -2,11 +2,13 @@
 #include <SDL.h>
 #else
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
 #endif
 #include <iostream>
 
 int main()
 {
+    bool quit = false;
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
     {
         std::cout << "Error initializing SDL." << std::endl;
@@ -39,10 +41,13 @@ int main()
         return 1;
     }
 
+    SDL_Surface* image = IMG_Load("../images/Emoji/2763.png");
+    SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, image);
+
     SDL_Event sdlEvent;
     // sdlEvent is passed by reference
     // event is fetched from queue and assigned to sdlEvent
-    while (true)
+    while (!quit)
     {
         while (SDL_PollEvent(&sdlEvent))
         {
@@ -50,26 +55,30 @@ int main()
             switch (sdlEvent.type)
             {
                 case SDL_QUIT:
-                    SDL_DestroyRenderer(renderer);
-                    SDL_DestroyWindow(window);
-                    SDL_Quit();
-                    return 0;
+                    quit = true;
+                    break;
                 case SDL_KEYDOWN:
                     if (sdlEvent.key.keysym.sym == SDLK_ESCAPE)
                     {
-                        SDL_DestroyRenderer(renderer);
-                        SDL_DestroyWindow(window);
-                        SDL_Quit();
-                        return 0;
+                        quit = true;
                     }
                     break;
                 default:
                     break;
             }
         }
+
+        SDL_Rect dstRect = { (mode.w / 2) - 256, (mode.h / 2) - 256, 512, 512 };
+        SDL_RenderCopy(renderer, texture, NULL, &dstRect);
+        SDL_RenderPresent(renderer);
     }
 
-    SDL_SetRenderDrawColor(renderer, 16, 16, 16, 255);
-    SDL_RenderClear(renderer);
-    SDL_RenderPresent(renderer);
+    SDL_DestroyTexture(texture);
+    SDL_FreeSurface(image);
+    SDL_DestroyRenderer(renderer);
+    SDL_DestroyWindow(window);
+
+    SDL_Quit();
+
+    return 0;
 }
