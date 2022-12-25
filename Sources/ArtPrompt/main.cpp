@@ -1,5 +1,6 @@
 #include <iostream>
 #include "SFML/Graphics.hpp"
+#include "SFML/System/Vector2.hpp"
 #include "SFML/Window.hpp"
 
 int main()
@@ -29,6 +30,13 @@ int main()
 
         sf::Sprite sprite;
         sprite.setTexture(texture);
+
+        sf::Vector2u windowSize = window.getSize();
+
+        sprite.setPosition(windowSize.x / 2, windowSize.y / 2);
+        sprite.setOrigin(36.f, 36.f);
+        sprite.setScale(5.f, 5.f);
+
         window.draw(sprite);
         window.display();
     }
