@@ -34,8 +34,7 @@ int main()
         sf::Vector2u windowSize = window.getSize();
 
         sprite.setPosition(windowSize.x / 2, windowSize.y / 2);
-        sprite.setOrigin(36.f, 36.f);
-        sprite.setScale(5.f, 5.f);
+        sprite.setOrigin(256.f, 256.f);
 
         window.draw(sprite);
         window.display();
