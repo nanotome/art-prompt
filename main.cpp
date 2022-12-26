@@ -15,13 +15,67 @@
 #include <string>
 #include <vector>
 
-int main()
+int main(int argc, char* argv[])
 {
     bool quit = false;
 
     /**
     Access SQlite db to write all emoji svgs into the sqlite db
     */
+    sqlite3* db;
+    int rc;
+    char* zErrMsg = 0;
+    char* masterDataTableSQL;
+    char* jobsTableSQL;
+    char* jobsInsertSQL;
+
+    rc = sqlite3_open("../ranmoji.db", &db);
+
+    if (rc)
+    {
+        std::cerr << "Unable to open database" << sqlite3_errmsg(db)
+                  << std::endl;
+        return 0;
+    }
+
+    std::cout << "Opened database successfully" << std::endl;
+
+    masterDataTableSQL =
+        "CREATE TABLE master_data("
+        "id int primary key not null,"
+        "svg text not null);";
+
+    jobsTableSQL =
+        "CREATE TABLE jobs("
+        "id int primary key not null,"
+        "svg text not null,"
+        "status varchar(50) not null default 'NEW',"
+        "startedAt DATE,"
+        "finishedAt DATE);";
+
+    rc = sqlite3_exec(db, masterDataTableSQL, NULL, NULL, NULL);
+
+    if (rc != SQLITE_OK)
+    {
+        std::cerr << "SQL error: " << zErrMsg << std::endl;
+        sqlite3_free(zErrMsg);
+    }
+    else
+    {
+        std::cout << "Master table created successfully" << std::endl;
+    }
+
+    rc = sqlite3_exec(db, jobsTableSQL, NULL, NULL, NULL);
+
+    if (rc != SQLITE_OK)
+    {
+        std::cerr << "SQL error: " << zErrMsg << std::endl;
+        sqlite3_free(zErrMsg);
+    }
+    else
+    {
+        std::cout << "Jobs table created successfully" << std::endl;
+    }
 
     std::vector<std::string> emojiPaths;
     const std::filesystem::path emojis{ "../images/svg" };
