@@ -5,8 +5,10 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #endif
+#include <sqlite3.h>
 #include <algorithm>
 #include <filesystem>
+#include <fstream>
 #include <iostream>
 #include <iterator>
 #include <random>
@@ -16,11 +18,26 @@
 int main()
 {
     bool quit = false;
+
+    /**
+    Access SQlite db to write all emoji svgs into the sqlite db
+    */
+
     std::vector<std::string> emojiPaths;
-    const std::filesystem::path emojis{ "../images/Emoji" };
+    const std::filesystem::path emojis{ "../images/svg" };
     for (const auto& entry : std::filesystem::directory_iterator{ emojis })
     {
         emojiPaths.push_back(entry.path());
+        std::ifstream svgFile(entry.path());
+        std::string fileLine;
+        std::string svgText;
+
+        while (std::getline(svgFile, fileLine))
+        {
+            svgText += fileLine;
+        }
+
+        // std::cout << svgText << std::endl;
     }
 
     std::random_device dev;
