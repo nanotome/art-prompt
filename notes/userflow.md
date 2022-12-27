@@ -28,6 +28,7 @@ SELECT * FROM table ORDER BY RANDOM() LIMIT 1;
 ```
 
 # TODO
-- [ ] Test SDL2 svg load
-- [ ] Create C++ script to write all the twemoji SVG into an sqlite db
+- [x] Test SDL2 svg load
+- [x] Create C++ script to write all the twemoji SVG into an sqlite db
+Annotated script is in `sqlite_table_create.cpp`.
 - [ ] Load sqlite in program and select random row
