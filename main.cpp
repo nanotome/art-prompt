@@ -25,10 +25,6 @@ int main(int argc, char* argv[])
     sqlite3* db;
     int rc;
     char* zErrMsg = 0;
-    std::string masterDataTableSQL;
-    std::string jobsTableSQL;
-    std::string masterDataInsertSQL;
-    std::string jobsInsertSQL;
 
     rc = sqlite3_open("../ranmoji.db", &db);
 
@@ -40,96 +36,6 @@ int main(int argc, char* argv[])
     }
 
     std::cout << "Opened database successfully" << std::endl;
-
-    masterDataTableSQL =
-        "CREATE TABLE master_data("
-        "id int primary key not null,"
-        "emoji_id varchar(255) not null,"
-        "svg text not null);";
-
-    jobsTableSQL =
-        "CREATE TABLE jobs("
-        "id int primary key not null,"
-        "emoji_id varchar(255) not null,"
-        "svg text not null,"
-        "status varchar(50) not null default 'NEW',"
-        "startedAt DATE,"
-        "finishedAt DATE);";
-
-    rc =
-        sqlite3_exec(db, masterDataTableSQL.c_str(), nullptr, nullptr, nullptr);
-
-    if (rc != SQLITE_OK)
-    {
-        std::cerr << "SQL error: " << zErrMsg << std::endl;
-        sqlite3_free(zErrMsg);
-    }
-    else
-    {
-        std::cout << "Master table created successfully" << std::endl;
-    }
-
-    rc = sqlite3_exec(db, jobsTableSQL.c_str(), nullptr, nullptr, nullptr);
-
-    if (rc != SQLITE_OK)
-    {
-        std::cerr << "SQL error: " << zErrMsg << std::endl;
-        sqlite3_free(zErrMsg);
-    }
-    else
-    {
-        std::cout << "Jobs table created successfully" << std::endl;
-    }
-
-    std::vector<std::string> emojiPaths;
-    const std::filesystem::path emojis{ "../images/svg" };
-    for (const auto& entry : std::filesystem::directory_iterator{ emojis })
-    {
-        emojiPaths.push_back(entry.path());
-        std::ifstream svgFile(entry.path());
-        std::string fileLine;
-        std::string svgText;
-
-        while (std::getline(svgFile, fileLine))
-        {
-            svgText += fileLine;
-        }
-
-        std::cout << "Inserting SVG:" << std::endl;
-        std::cout << entry.path() << std::endl;
-
-        // insert into db here
-        masterDataInsertSQL =
-            "insert into master_data (emoji_id,svg) values('" +
-            entry.path().string() + "','" + svgText + "');";
-        jobsInsertSQL = "insert into jobs (emoji_id,svg) values('" +
-                        entry.path().string() + ",'" + svgText + "');";
-
-        rc = sqlite3_exec(db, masterDataInsertSQL.c_str(), nullptr, nullptr,
-                          nullptr);
-        if (rc != SQLITE_OK)
-        {
-            std::cerr << "Master data insert SQL error: " << zErrMsg
-                      << std::endl;
-            sqlite3_free(zErrMsg);
-        }
-
-        rc = sqlite3_exec(db, jobsInsertSQL.c_str(), nullptr, nullptr, nullptr);
-
-        if (rc != SQLITE_OK)
-        {
-            std::cerr << "Jobs insert SQL error: " << zErrMsg << std::endl;
-            sqlite3_free(zErrMsg);
-        }
-    }
-
-    std::random_device dev;
-    std::mt19937 randomness_generator(dev());
-    std::uniform_int_distribution<std::size_t> index_distribution(
-        0, emojiPaths.size());
-
-    auto i = index_distribution(randomness_generator);
-    const std::string randomEmoji = emojiPaths[i];
 
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
     {
@@ -162,9 +68,6 @@ int main(int argc, char* argv[])
         std::cout << "Error creating SDL renderer." << std::endl;
         return 1;
     }
-
-    // SDL_Surface* image = IMG_Load(randomEmoji.c_str());
-    // SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, image);
 
     const std::string svg =
         "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 36' "
