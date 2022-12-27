@@ -25,9 +25,10 @@ int main(int argc, char* argv[])
     sqlite3* db;
     int rc;
     char* zErrMsg = 0;
-    char* masterDataTableSQL;
-    char* jobsTableSQL;
-    char* jobsInsertSQL;
+    std::string masterDataTableSQL;
+    std::string jobsTableSQL;
+    std::string masterDataInsertSQL;
+    std::string jobsInsertSQL;
 
     rc = sqlite3_open("../ranmoji.db", &db);
 
@@ -43,17 +44,20 @@ int main(int argc, char* argv[])
     masterDataTableSQL =
         "CREATE TABLE master_data("
         "id int primary key not null,"
+        "emoji_id varchar(255) not null,"
         "svg text not null);";
 
     jobsTableSQL =
         "CREATE TABLE jobs("
         "id int primary key not null,"
+        "emoji_id varchar(255) not null,"
         "svg text not null,"
         "status varchar(50) not null default 'NEW',"
         "startedAt DATE,"
         "finishedAt DATE);";
 
-    rc = sqlite3_exec(db, masterDataTableSQL, NULL, NULL, NULL);
+    rc =
+        sqlite3_exec(db, masterDataTableSQL.c_str(), nullptr, nullptr, nullptr);
 
     if (rc != SQLITE_OK)
     {
@@ -65,7 +69,7 @@ int main(int argc, char* argv[])
         std::cout << "Master table created successfully" << std::endl;
     }
 
-    rc = sqlite3_exec(db, jobsTableSQL, NULL, NULL, NULL);
+    rc = sqlite3_exec(db, jobsTableSQL.c_str(), nullptr, nullptr, nullptr);
 
     if (rc != SQLITE_OK)
     {
@@ -91,7 +95,32 @@ int main(int argc, char* argv[])
             svgText += fileLine;
         }
 
-        // std::cout << svgText << std::endl;
+        std::cout << "Inserting SVG:" << std::endl;
+        std::cout << entry.path() << std::endl;
+
+        // insert into db here
+        masterDataInsertSQL =
+            "insert into master_data (emoji_id,svg) values('" +
+            entry.path().string() + "','" + svgText + "');";
+        jobsInsertSQL = "insert into jobs (emoji_id,svg) values('" +
+                        entry.path().string() + ",'" + svgText + "');";
+
+        rc = sqlite3_exec(db, masterDataInsertSQL.c_str(), nullptr, nullptr,
+                          nullptr);
+        if (rc != SQLITE_OK)
+        {
+            std::cerr << "Master data insert SQL error: " << zErrMsg
+                      << std::endl;
+            sqlite3_free(zErrMsg);
+        }
+
+        rc = sqlite3_exec(db, jobsInsertSQL.c_str(), nullptr, nullptr, nullptr);
+
+        if (rc != SQLITE_OK)
+        {
+            std::cerr << "Jobs insert SQL error: " << zErrMsg << std::endl;
+            sqlite3_free(zErrMsg);
+        }
     }
 
     std::random_device dev;
