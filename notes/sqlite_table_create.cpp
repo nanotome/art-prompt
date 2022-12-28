@@ -19,12 +19,8 @@ int main(int argc, char* argv[])
     char* zErrMsg = 0;  // holds the error message of a failed SQLite execution;
                         // must be passed into the call as a reference
 
-    std::string masterDataTableSQL;  // container for sqlite statement to create
-                                     // master_data table
     std::string
         jobsTableSQL;  // container for sqlite statement to create jobs table
-    std::string masterDataInsertSQL;  // container for sqlite statement to
-                                      // insert data into master_data table
     std::string jobsInsertSQL;  // container for sqlite statement to insert data
                                 // into jobs table
 
@@ -42,12 +38,6 @@ int main(int argc, char* argv[])
     // sqlite statement as raw string; best practice is to use a
     // prepared_statement id table must be autoincrement if not null or an error
     // will be thrown
-    masterDataTableSQL =
-        "CREATE TABLE master_data("
-        "id int primary key autoincrement not null,"
-        "emoji_id varchar(255) not null,"
-        "svg text not null);";
-
     jobsTableSQL =
         "CREATE TABLE jobs("
         "id int primary key autoincrement not null,"
@@ -62,19 +52,6 @@ int main(int argc, char* argv[])
     // zErrMsg is passed in via reference so the error result is stored into it.
     // Failure to do so results in a segmentation fault error when trying to
     // cout the error message
-    rc = sqlite3_exec(db, masterDataTableSQL.c_str(), nullptr, nullptr,
-                      &zErrMsg);
-
-    if (rc != SQLITE_OK)
-    {
-        std::cerr << "SQL error: " << zErrMsg << std::endl;
-        sqlite3_free(zErrMsg);
-    }
-    else
-    {
-        std::cout << "Master table created successfully" << std::endl;
-    }
-
     rc = sqlite3_exec(db, jobsTableSQL.c_str(), nullptr, nullptr, &zErrMsg);
 
     if (rc != SQLITE_OK)
@@ -108,20 +85,8 @@ int main(int argc, char* argv[])
         // insert into db here
         // raw string; best practice is to use a prepared statement with
         // parameters
-        masterDataInsertSQL =
-            "insert into master_data (emoji_id,svg) values(\"" +
-            entry.path().string() + "\",\"" + svgText + "\");";
         jobsInsertSQL = "insert into jobs (emoji_id,svg) values(\"" +
                         entry.path().string() + "\",\"" + svgText + "\");";
-
-        rc = sqlite3_exec(db, masterDataInsertSQL.c_str(), nullptr, nullptr,
-                          &zErrMsg);
-        if (rc != SQLITE_OK)
-        {
-            std::cerr << "Master data insert SQL error: " << zErrMsg
-                      << std::endl;
-            sqlite3_free(zErrMsg);
-        }
 
         rc =
             sqlite3_exec(db, jobsInsertSQL.c_str(), nullptr, nullptr, &zErrMsg);
