@@ -41,7 +41,7 @@ int main(int argc, char* argv[])
     std::cout << "Opened database successfully" << std::endl;
 
     // select current job: job with status RUNNING
-    jobsQuery = "select * from jobs where status = 'RUNNING'";
+    jobsQuery = "select * from jobs where status = 'RUNNING' limit 1";
 
     rc = sqlite3_prepare_v2(db, jobsQuery.c_str(), -1, &compiledJobsQuery,
                             nullptr);
@@ -60,6 +60,31 @@ int main(int argc, char* argv[])
     {
         emojiSVG =
             std::string((char*)sqlite3_column_text(compiledJobsQuery, 2));
+    }
+    else if (rc == SQLITE_DONE)
+    {
+        jobsQuery =
+            "select * from jobs where status = 'NEW' order by random() limit 1";
+        rc = sqlite3_prepare_v2(db, jobsQuery.c_str(), -1, &compiledJobsQuery,
+                                nullptr);
+
+        if (rc != SQLITE_OK)
+        {
+            sqlite3_finalize(compiledJobsQuery);
+            std::cerr << "SQLite: Failed to prepare statement: "
+                      << sqlite3_errstr(rc) << std::endl;
+            return 1;
+        }
+
+        rc = sqlite3_step(compiledJobsQuery);
+
+        if (rc == SQLITE_ROW)
+        {
+            emojiSVG =
+                std::string((char*)sqlite3_column_text(compiledJobsQuery, 2));
+            // TODO: update row; set startedAt to current date, set status to
+            // 'RUNNING'
+        }
     }
 
     sqlite3_finalize(compiledJobsQuery);
