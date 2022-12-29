@@ -28,6 +28,7 @@ int main(int argc, char* argv[])
     std::string jobsQuery;
     sqlite3_stmt* compiledJobsQuery{ nullptr };
     std::string emojiSVG = "";
+    int jobId = 0;
 
     rc = sqlite3_open("../ranmoji.db", &db);
 
@@ -82,6 +83,7 @@ int main(int argc, char* argv[])
         {
             emojiSVG =
                 std::string((char*)sqlite3_column_text(compiledJobsQuery, 2));
+            jobId = sqlite3_column_int(compiledJobsQuery, 0);
             // TODO: update row; set startedAt to current date, set status to
             // 'RUNNING'
         }
