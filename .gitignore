@@ -1,69 +1,74 @@
-# Prerequisites
-*.d
+# This file is used to ignore files which are generated
+# ----------------------------------------------------------------------------
 
-# Compiled Object files
-*.slo
-*.lo
+*~
+*.autosave
+*.a
+*.core
+*.moc
 *.o
 *.obj
-
-# Precompiled Headers
-*.gch
-*.pch
-
-# Compiled Dynamic libraries
+*.orig
+*.rej
 *.so
-*.dylib
-*.dll
-
-# Fortran module files
-*.mod
-*.smod
-
-# Compiled Static libraries
-*.lai
-*.la
-*.a
-*.lib
-
-# Executables
-*.exe
-*.out
+*.so.*
+*_pch.h.cpp
+*_resource.rc
+*.qm
+.#*
+*.*#
+core
+!core/
+tags
+.DS_Store
+.directory
+*.debug
+Makefile*
+*.prl
 *.app
+moc_*.cpp
+ui_*.h
+qrc_*.cpp
+Thumbs.db
+*.res
+*.rc
+/.qmake.cache
+/.qmake.stash
 
-# Vim Swap
-*.swp
+# qtcreator generated files
+*.pro.user*
+CMakeLists.txt.user*
 
-# Project
-Makefile
-cmake-build*
-roms*
-nemulator
-CMakeFiles
-cmake_install.cmake
-testing
-build
-bin
+# xemacs temporary files
+*.flc
 
-# Clion
-.idea
+# Vim temporary files
+.*.swp
 
-# Libs
-!lib/googletest-master/.gitignore
-lib/googletest-master/*
-lib/*
-lib
-lib/CppSockets*
-lib/imgui*
-lib/portable-file-dialogs*
-lib/yaml-cpp*
+# Visual Studio generated files
+*.ib_pdb_index
+*.idb
+*.ilk
+*.pdb
+*.sln
+*.suo
+*.vcproj
+*vcproj.*.*.user
+*.ncb
+*.sdf
+*.opensdf
+*.vcxproj
+*vcxproj.*
 
-# Emulator files
-logs
-saves
+# MinGW generated files
+*.Debug
+*.Release
 
-# VSCode
-.vscode
+# Python byte code
+*.pyc
 
-# Clang
-.cache
+# Binaries
+# --------
+*.dll
+*.exe
+
