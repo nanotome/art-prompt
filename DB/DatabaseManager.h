@@ -17,7 +17,6 @@ public:
 private:
   QSqlDatabase _database;
   bool connectDatabase();
-  bool createTables();
 };
 
 #endif //RPGDB_DB_DATABASEMANAGER_H

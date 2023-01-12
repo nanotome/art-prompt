@@ -18,7 +18,7 @@ DatabaseManager::~DatabaseManager() {
 bool DatabaseManager::connectDatabase() {
   try {
 	_database = QSqlDatabase::addDatabase("QSQLITE");
-    _database.setDatabaseName("RPGDB.db");
+    _database.setDatabaseName("ranmoji.db");
 
 	bool isOpen = _database.open();
 
@@ -30,7 +30,6 @@ bool DatabaseManager::connectDatabase() {
 	return false;
   }
 
-  createTables();
   qDebug() << "Database: connection ok";
   return true;
 }
@@ -41,18 +40,4 @@ bool DatabaseManager::isDatabaseOpen() const {
 
 QSqlDatabase DatabaseManager::getDatabase() {
   return _database;
-}
-
-bool DatabaseManager::createTables() {
-  QSqlQuery query(_database);
-
-  query.exec(
-    "CREATE TABLE IF NOT EXISTS actor_type( "
-    "  actor_type_id INTEGER PRIMARY KEY, "
-    "  name TEXT, "
-    "  description TEXT"
-    ")"
-  );
-
-  return true;
 }

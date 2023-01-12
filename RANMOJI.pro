@@ -31,7 +31,7 @@ FORMS += \
     QT/actorform.ui
 
 TRANSLATIONS += \
-    rpgdb_ja_JP.ts
+    ranmoji_ja_JP.ts
 CONFIG += lrelease
 CONFIG += embed_translations
 
