@@ -11,8 +11,8 @@ MainWindow::MainWindow(QWidget *parent) :
 	QMainWindow(parent), ui(new Ui::MainWindow) {
 
   ui->setupUi(this);
-  _mainContainer = new ResourceContainer();
-  setCentralWidget(_mainContainer);
+  _emojiForm = new EmojiForm();
+  setCentralWidget(_emojiForm);
 }
 
 MainWindow::~MainWindow() {

@@ -9,20 +9,20 @@
 #include "../Models/ActorType.h"
 
 QT_BEGIN_NAMESPACE
-namespace Ui { class ActorForm; }
+namespace Ui { class EmojiForm; }
 QT_END_NAMESPACE
 
-class ActorForm : public QWidget {
+class EmojiForm : public QWidget {
 Q_OBJECT
 
 public:
-  explicit ActorForm(QWidget *parent = nullptr);
-  ~ActorForm() override;
+  explicit EmojiForm(QWidget *parent = nullptr);
+  ~EmojiForm() override;
 
   bool saveForm();
 
 private:
-  Ui::ActorForm *ui;
+  Ui::EmojiForm *ui;
   void setupUiInteraction();
   void initializeForm();
 

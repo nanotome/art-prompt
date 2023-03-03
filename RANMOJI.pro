@@ -13,7 +13,6 @@ SOURCES += \
     DB/DatabaseManager.cpp \
     DB/DatabaseUtils.cpp \
     QT/mainwindow.cpp \
-    QT/resourcecontainer.cpp \
     QT/actorform.cpp \
     Models/ActorType.cpp
 
@@ -21,13 +20,11 @@ HEADERS += \
     DB/DatabaseManager.h \
     DB/DatabaseUtils.h \
     QT/mainwindow.h \
-    QT/resourcecontainer.h \
     QT/actorform.h \
     Models/ActorType.h
 
 FORMS += \
     QT/mainwindow.ui \
-    QT/resourcecontainer.ui \
     QT/actorform.ui
 
 TRANSLATIONS += \

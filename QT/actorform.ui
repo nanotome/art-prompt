@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>ActorForm</class>
- <widget class="QWidget" name="ActorForm">
+ <class>EmojiForm</class>
+ <widget class="QWidget" name="EmojiForm">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -33,7 +33,7 @@
      <number>0</number>
     </property>
     <item>
-     <layout class="QHBoxLayout" name="formContentLayout" stretch="2,0,10">
+     <layout class="QHBoxLayout" name="formContentLayout" stretch="0,10">
       <property name="spacing">
        <number>6</number>
       </property>
@@ -43,29 +43,6 @@
       <property name="rightMargin">
        <number>0</number>
       </property>
-      <item>
-       <layout class="QVBoxLayout" name="actorListContainer">
-        <property name="spacing">
-         <number>1</number>
-        </property>
-        <property name="leftMargin">
-         <number>0</number>
-        </property>
-        <property name="bottomMargin">
-         <number>0</number>
-        </property>
-        <item>
-         <widget class="QListView" name="actorListView"/>
-        </item>
-        <item>
-         <widget class="QPushButton" name="addActorButton">
-          <property name="text">
-           <string>Add</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
       <item>
        <spacer name="horizontalSpacer">
         <property name="orientation">
@@ -91,57 +68,14 @@
          <number>0</number>
         </property>
         <item>
-         <layout class="QFormLayout" name="formLayout_5">
-          <property name="fieldGrowthPolicy">
-           <enum>QFormLayout::ExpandingFieldsGrow</enum>
-          </property>
-          <property name="leftMargin">
-           <number>0</number>
-          </property>
-          <property name="topMargin">
-           <number>0</number>
-          </property>
-          <item row="0" column="0">
-           <widget class="QLabel" name="actorNameLabel">
-            <property name="text">
-             <string>Name</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1">
-           <widget class="QLineEdit" name="actorName"/>
-          </item>
-          <item row="1" column="0">
-           <widget class="QLabel" name="actorDescriptionLabel">
-            <property name="text">
-             <string>Description</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="1">
-           <widget class="QTextEdit" name="actorDescription"/>
-          </item>
-         </layout>
-        </item>
-        <item>
-         <spacer name="verticalSpacer">
-          <property name="orientation">
-           <enum>Qt::Vertical</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>20</width>
-            <height>40</height>
-           </size>
-          </property>
-         </spacer>
+         <widget class="QGraphicsView" name="emojiView"/>
         </item>
        </layout>
       </item>
      </layout>
     </item>
     <item>
-     <layout class="QHBoxLayout" name="actorTypeActionButtons">
+     <layout class="QHBoxLayout" name="emojiActionButtons">
       <item>
        <spacer name="horizontalSpacer_3">
         <property name="orientation">
@@ -156,38 +90,26 @@
        </spacer>
       </item>
       <item>
-       <widget class="QPushButton" name="actorTypeOkButton">
+       <widget class="QPushButton" name="emojiDoneButton">
         <property name="font">
          <font>
           <pointsize>12</pointsize>
          </font>
         </property>
         <property name="text">
-         <string>OK</string>
+         <string>Done</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="actorTypeCancelButton">
+       <widget class="QPushButton" name="emojiSkipButton">
         <property name="font">
          <font>
           <pointsize>12</pointsize>
          </font>
         </property>
         <property name="text">
-         <string>Cancel</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="applyButton">
-        <property name="font">
-         <font>
-          <pointsize>12</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>Apply</string>
+         <string>Skip</string>
         </property>
        </widget>
       </item>

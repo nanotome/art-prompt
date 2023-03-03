@@ -6,7 +6,7 @@
 #define RPGDB_QT_MAINWINDOW_H
 
 #include <QMainWindow>
-#include "resourcecontainer.h"
+#include "actorform.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -21,7 +21,7 @@ public:
 
 private:
   Ui::MainWindow *ui;
-  ResourceContainer *_mainContainer;
+  EmojiForm *_emojiForm;
 };
 
 #endif //RPGDB_QT_MAINWINDOW_H
