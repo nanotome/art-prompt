@@ -14,14 +14,14 @@ SOURCES += \
     DB/DatabaseUtils.cpp \
     QT/mainwindow.cpp \
     QT/actorform.cpp \
-    Models/ActorType.cpp
+    Models/Emoji.cpp
 
 HEADERS += \
     DB/DatabaseManager.h \
     DB/DatabaseUtils.h \
     QT/mainwindow.h \
     QT/actorform.h \
-    Models/ActorType.h
+    Models/Emoji.h
 
 FORMS += \
     QT/mainwindow.ui \
