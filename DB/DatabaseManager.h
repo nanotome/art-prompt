@@ -14,9 +14,10 @@ public:
 
   [[nodiscard]] bool isDatabaseOpen() const;
   QSqlDatabase getDatabase();
+  bool initDatabase();
 private:
   QSqlDatabase _database;
-  bool connectDatabase();
+
 };
 
 #endif //RPGDB_DB_DATABASEMANAGER_H

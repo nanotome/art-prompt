@@ -6,32 +6,27 @@
 
 #include <QSqlQuery>
 #include <QDebug>
+#include <QSqlError>
 
 DatabaseManager::DatabaseManager() {
-  connectDatabase();
 }
 
 DatabaseManager::~DatabaseManager() {
   _database.close();
 }
 
-bool DatabaseManager::connectDatabase() {
-  try {
-	_database = QSqlDatabase::addDatabase("QSQLITE");
-    _database.setDatabaseName("ranmoji.db");
+bool DatabaseManager::initDatabase() {
+    auto db = QSqlDatabase::addDatabase("QSQLITE", "ranmoji.db");
 
-	bool isOpen = _database.open();
+    bool isOpen = db.open();
 
-	if (!isOpen) {
-	  throw std::runtime_error{"Couldn't open database..."};
-	}
-  } catch (std::exception &e) {
-	(void)(e);
-	return false;
-  }
+    if (!isOpen) {
+      auto mError = db.lastError().text();
+      qDebug() << mError;
+    }
 
-  qDebug() << "Database: connection ok";
-  return true;
+    qDebug() << "Database: connection ok";
+    return isOpen;
 }
 
 bool DatabaseManager::isDatabaseOpen() const {
@@ -39,5 +34,5 @@ bool DatabaseManager::isDatabaseOpen() const {
 }
 
 QSqlDatabase DatabaseManager::getDatabase() {
-  return _database;
+  return QSqlDatabase::database("ranmoji.db");
 }

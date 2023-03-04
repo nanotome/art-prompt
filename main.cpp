@@ -38,7 +38,7 @@ int main(int argc, char *argv[]) {
   QApplication a(argc, argv);
   DatabaseManager dbManager;
 
-  if (!dbManager.isDatabaseOpen()) {
+  if (!dbManager.initDatabase()) {
 	qDebug() << "Database not open";
   }
 
