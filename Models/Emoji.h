@@ -27,8 +27,8 @@ public:
   QDateTime finishedAt() const;
 
   bool markAsDone();
-  Emoji skip();
-  Emoji nextEmoji();
+  Emoji* skip();
+  Emoji* nextEmoji();
 
   Emoji emojiFromQuery(const QSqlQuery& query);
   Emoji fetchCurrentEmoji();

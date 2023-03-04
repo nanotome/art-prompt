@@ -1,19 +1,18 @@
 //
 // Created by Ifeanyi Oraelosi on 22.12.21.
 //
-
-// You may need to build the project (run Qt uic code generator) to get "ui_actorform.h" resolved
 #include <QDebug>
 #include "actorform.h"
 #include "ui_actorform.h"
 
-#include "../Models/ActorType.h"
+#include "../Models/Emoji.h"
 
 EmojiForm::EmojiForm(QWidget *parent) :
     QWidget(parent), ui(new Ui::EmojiForm) {
   ui->setupUi(this);
 
   setupUiInteraction();
+  initializeForm();
 }
 
 EmojiForm::~EmojiForm() {
@@ -21,18 +20,18 @@ EmojiForm::~EmojiForm() {
 }
 
 void EmojiForm::initializeForm() {
-  // TODO: Initialize model from database if available
-  m_formModel = new ActorType;
+  m_formModel = Emoji().nextEmoji();
+  qDebug() << m_formModel->svg();
 }
 
 void EmojiForm::setupUiInteraction() {
   connect(ui->emojiDoneButton, &QPushButton::clicked, this, [&]() {
-      EmojiForm::saveForm();
+      EmojiForm::markEmojiAsDone();
   });
 }
 
-bool EmojiForm::saveForm(){
-
+bool EmojiForm::markEmojiAsDone(){
+    return m_formModel->markAsDone();
 }
 
 void EmojiForm::isFormDirty() {

@@ -6,7 +6,7 @@
 #define RPGDB_QT_ACTORFORM_H
 
 #include <QWidget>
-#include "../Models/ActorType.h"
+#include "../Models/Emoji.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class EmojiForm; }
@@ -19,14 +19,14 @@ public:
   explicit EmojiForm(QWidget *parent = nullptr);
   ~EmojiForm() override;
 
-  bool saveForm();
+  bool markEmojiAsDone();
 
 private:
   Ui::EmojiForm *ui;
   void setupUiInteraction();
   void initializeForm();
 
-  ActorType *m_formModel;
+  Emoji *m_formModel;
 
 private slots:
   void isFormDirty();

@@ -56,7 +56,7 @@ bool Emoji::markAsDone() {
   return query.exec();
 }
 
-Emoji Emoji::skip() {
+Emoji* Emoji::skip() {
     fetchNextEmoji();
 
     m_status = "RUNNING";
@@ -68,7 +68,7 @@ Emoji Emoji::skip() {
     query.bindValue(":id", this->id());
     query.bindValue(":status", this->status());
 
-    return *this;
+    return this;
 }
 
 /**
@@ -78,7 +78,7 @@ Emoji Emoji::skip() {
  * @brief Emoji::nextEmoji
  * @return
  */
-Emoji Emoji::nextEmoji() {
+Emoji* Emoji::nextEmoji() {
     fetchCurrentEmoji();
 
     if (this->emojiId() == "") {
@@ -95,7 +95,7 @@ Emoji Emoji::nextEmoji() {
     query.bindValue(":id", this->id());
     query.bindValue(":status", this->status());
 
-    return *this;
+    return this;
 }
 
 Emoji Emoji::fetchCurrentEmoji() {
