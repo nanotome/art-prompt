@@ -20,7 +20,8 @@ EmojiForm::~EmojiForm() {
 }
 
 void EmojiForm::initializeForm() {
-  m_formModel = Emoji().nextEmoji();
+    Emoji newEmoji;
+  m_formModel = newEmoji.nextEmoji();
   qDebug() << m_formModel->svg();
 }
 

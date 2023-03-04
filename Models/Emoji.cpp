@@ -91,7 +91,7 @@ Emoji* Emoji::nextEmoji() {
     DatabaseManager dbManager;
     QSqlQuery query(dbManager.getDatabase());
 
-    query.prepare("UPDATE jobs SET 'status' = :status WHERE 'id' = :id");
+    query.prepare("UPDATE jobs SET status = :status WHERE id = :id");
     query.bindValue(":id", this->id());
     query.bindValue(":status", this->status());
 
@@ -102,9 +102,12 @@ Emoji Emoji::fetchCurrentEmoji() {
   DatabaseManager dbManager;
   QSqlQuery query(dbManager.getDatabase());
 
-  query.prepare("SELECT * FROM jobs WHERE 'status' = 'RUNNING' LIMIT 1");
+  query.prepare("SELECT * FROM jobs WHERE status = :status LIMIT 1");
+  query.bindValue(":status", "RUNNING");
 
-  if (!query.exec()) {
+  auto queryExec = query.exec();
+
+  if (!queryExec) {
 	qWarning() << __func__ << ": " << query.lastError();
   } else {
 	if (query.first()) {
@@ -119,9 +122,12 @@ Emoji Emoji::fetchNextEmoji() {
     DatabaseManager dbManager;
     QSqlQuery query(dbManager.getDatabase());
 
-    query.prepare("SELECT * FROM jobs WHERE 'status' = 'NEW' ORDER BY random() LIMIT 1");
+    query.prepare("SELECT * FROM jobs WHERE status = :status ORDER BY random() LIMIT 1");
+    query.bindValue(":status", "NEW");
 
-    if (!query.exec()) {
+    auto queryExec = query.exec();
+
+    if (!queryExec) {
       qWarning() << __func__ << ": " << query.lastError();
     } else {
       if (query.first()) {

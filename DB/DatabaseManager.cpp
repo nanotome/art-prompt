@@ -7,6 +7,8 @@
 #include <QSqlQuery>
 #include <QDebug>
 #include <QSqlError>
+#include <QSqlDriver>
+#include <QCoreApplication>
 
 DatabaseManager::DatabaseManager() {
 }
@@ -16,7 +18,8 @@ DatabaseManager::~DatabaseManager() {
 }
 
 bool DatabaseManager::initDatabase() {
-    auto db = QSqlDatabase::addDatabase("QSQLITE", "ranmoji.db");
+    auto db = QSqlDatabase::addDatabase("QSQLITE");
+    db.setDatabaseName(QCoreApplication::applicationDirPath() + "/ranmoji.db");
 
     bool isOpen = db.open();
 
@@ -34,5 +37,5 @@ bool DatabaseManager::isDatabaseOpen() const {
 }
 
 QSqlDatabase DatabaseManager::getDatabase() {
-  return QSqlDatabase::database("ranmoji.db");
+  return QSqlDatabase::database(QCoreApplication::applicationDirPath() + "/ranmoji.db");
 }
