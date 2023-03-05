@@ -57,18 +57,7 @@ bool Emoji::markAsDone() {
 }
 
 Emoji* Emoji::skip() {
-    fetchNextEmoji();
-
-    m_status = "RUNNING";
-
-    DatabaseManager dbManager;
-    QSqlQuery query(dbManager.getDatabase());
-
-    query.prepare("UPDATE jobs SET 'status' = :status WHERE 'id' = :id");
-    query.bindValue(":id", this->id());
-    query.bindValue(":status", this->status());
-
-    return this;
+    return nextEmoji();
 }
 
 /**
@@ -102,7 +91,8 @@ Emoji Emoji::fetchCurrentEmoji() {
   DatabaseManager dbManager;
   QSqlQuery query(dbManager.getDatabase());
 
-  query.prepare("SELECT * FROM jobs WHERE status = :status LIMIT 1");
+  query.prepare("SELECT * FROM jobs WHERE id != :id AND status = :status LIMIT 1");
+  query.bindValue(":id", this->id());
   query.bindValue(":status", "RUNNING");
 
   auto queryExec = query.exec();
