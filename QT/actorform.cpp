@@ -2,6 +2,9 @@
 // Created by Ifeanyi Oraelosi on 22.12.21.
 //
 #include <QDebug>
+#include <QSvgRenderer>
+#include <QSvgWidget>
+#include <QGraphicsSvgItem>
 #include "actorform.h"
 #include "ui_actorform.h"
 
@@ -22,7 +25,10 @@ EmojiForm::~EmojiForm() {
 void EmojiForm::initializeForm() {
     Emoji newEmoji;
   m_formModel = newEmoji.nextEmoji();
-  qDebug() << m_formModel->svg();
+
+  QSvgWidget *svgWidget = new QSvgWidget(this);
+  svgWidget->renderer()->load(m_formModel->svg().toUtf8());
+  ui->actorGeneralContainer->addWidget(svgWidget);
 }
 
 void EmojiForm::setupUiInteraction() {
