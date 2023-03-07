@@ -6,6 +6,7 @@
 #define RPGDB_QT_ACTORFORM_H
 
 #include <QWidget>
+#include <QSvgWidget>
 #include "../Models/Emoji.h"
 
 QT_BEGIN_NAMESPACE
@@ -23,6 +24,7 @@ public:
 
 private:
   Ui::EmojiForm *ui;
+  QSvgWidget *emojiView;
   void setupUiInteraction();
   void initializeForm();
 

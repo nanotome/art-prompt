@@ -11,6 +11,8 @@
 
 EmojiForm::EmojiForm(QWidget *parent) :
     QWidget(parent), ui(new Ui::EmojiForm) {
+    Emoji* newEmoji = new Emoji();
+  m_formModel = newEmoji->nextEmoji();
   ui->setupUi(this);
 
   setupUiInteraction();
@@ -22,19 +24,18 @@ EmojiForm::~EmojiForm() {
 }
 
 void EmojiForm::initializeForm() {
-    Emoji newEmoji;
-  m_formModel = newEmoji.nextEmoji();
-
-  QSvgWidget *svgWidget = new QSvgWidget(this);
-  svgWidget->renderer()->load(m_formModel->svg().toUtf8());
-  svgWidget->setFixedSize(512, 512);
-  ui->emojiContainer->addWidget(svgWidget);
+  emojiView = new QSvgWidget(this);
+  emojiView->renderer()->load(m_formModel->svg().toUtf8());
+  emojiView->setFixedSize(512, 512);
+  ui->emojiContainer->addWidget(emojiView);
   ui->emojiContainer->setAlignment(Qt::AlignCenter);
 }
 
 void EmojiForm::setupUiInteraction() {
   connect(ui->emojiDoneButton, &QPushButton::clicked, this, [&]() {
-      EmojiForm::markEmojiAsDone();
+      m_formModel->markAsDone();
+      emojiView->renderer()->load(m_formModel->svg().toUtf8());
+      emojiView->update();
   });
 }
 

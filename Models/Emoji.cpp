@@ -15,8 +15,8 @@ Emoji::Emoji() {
     m_emoji_id = "";
     m_svg = "";
     m_status = "NEW";
-    m_startedAt = QDateTime::currentDateTimeUtc();
-    m_finishedAt = QDateTime::currentDateTimeUtc();
+    m_startedAt = *new QDateTime();
+    m_finishedAt = *new QDateTime();
 }
 
 int Emoji::id() const {
@@ -43,17 +43,26 @@ QDateTime Emoji::finishedAt() const {
     return m_finishedAt;
 }
 
-bool Emoji::markAsDone() {
+Emoji* Emoji::markAsDone() {
     m_status = "FINISHED";
     m_finishedAt = QDateTime::currentDateTimeUtc();
   DatabaseManager dbManager;
   QSqlQuery query(dbManager.getDatabase());
 
-  query.prepare("UPDATE jobs SET 'finishedAt' = :finishedAt, 'status' = :status WHERE 'id' = :id");
+  query.prepare("UPDATE jobs SET finishedAt = :finishedAt, status = :status WHERE id = :id");
   query.bindValue(":id", this->id());
   query.bindValue(":status", this->status());
-  query.bindValue(":finishedAt", this->finishedAt().toString());
-  return query.exec();
+  query.bindValue(":finishedAt", this->finishedAt());
+
+  auto queryExec = query.exec();
+
+  if (!queryExec) {
+    qWarning() << __func__ << ": " << query.lastError();
+  } else {
+    return nextEmoji();
+  }
+
+  return {};
 }
 
 Emoji* Emoji::skip() {
@@ -71,18 +80,19 @@ Emoji* Emoji::nextEmoji() {
     fetchCurrentEmoji();
 
     if (this->emojiId() == "") {
-        // no RUNNING emoji was found
         fetchNextEmoji();
     }
 
     m_status = "RUNNING";
+    m_startedAt = QDateTime::currentDateTimeUtc();
 
     DatabaseManager dbManager;
     QSqlQuery query(dbManager.getDatabase());
 
-    query.prepare("UPDATE jobs SET status = :status WHERE id = :id");
+    query.prepare("UPDATE jobs SET startedAt = :startedAt, status = :status WHERE id = :id");
     query.bindValue(":id", this->id());
     query.bindValue(":status", this->status());
+    query.bindValue(":startedAt", this->startedAt());
 
     return this;
 }
@@ -102,7 +112,9 @@ Emoji Emoji::fetchCurrentEmoji() {
   } else {
 	if (query.first()) {
       return emojiFromQuery(query);
-	}
+    } else {
+        resetEmoji();
+    }
   }
 
   return {};
@@ -133,8 +145,25 @@ Emoji Emoji::emojiFromQuery(const QSqlQuery& query) {
   m_emoji_id = query.value("emoji_id").toString();
   m_svg = query.value("svg").toString();
   m_status = query.value("status").toString();
-  m_startedAt = QDateTime::fromString(query.value("startedAt").toString());
-  m_finishedAt = QDateTime::fromString(query.value("finishedAt").toString());
+
+  QString startedAtFromDb = query.value("startedAt").toString();
+  if (startedAtFromDb != "") {
+    m_startedAt = QDateTime::fromString(query.value("startedAt").toString());
+  }
+
+  QString finishedAtFromDb = query.value("finishedAt").toString();
+  if (finishedAtFromDb != "") {
+     m_finishedAt = QDateTime::fromString(query.value("finishedAt").toString());
+  }
 
   return *this;
+}
+
+void Emoji::resetEmoji() {
+    m_id = 0;
+    m_emoji_id = "";
+    m_svg = "";
+    m_status = "NEW";
+    m_startedAt = *new QDateTime();
+    m_finishedAt = *new QDateTime();
 }

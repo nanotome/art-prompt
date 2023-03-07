@@ -26,13 +26,15 @@ public:
   QDateTime startedAt() const;
   QDateTime finishedAt() const;
 
-  bool markAsDone();
+  Emoji* markAsDone();
   Emoji* skip();
   Emoji* nextEmoji();
 
   Emoji emojiFromQuery(const QSqlQuery& query);
   Emoji fetchCurrentEmoji();
   Emoji fetchNextEmoji();
+
+  void resetEmoji();
 };
 
 #endif //RANMOJI_MODELS_EMOJI_H
