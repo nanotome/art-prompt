@@ -4,7 +4,6 @@
 #include <QDebug>
 #include <QSvgRenderer>
 #include <QSvgWidget>
-#include <QGraphicsSvgItem>
 #include "actorform.h"
 #include "ui_actorform.h"
 
@@ -28,7 +27,9 @@ void EmojiForm::initializeForm() {
 
   QSvgWidget *svgWidget = new QSvgWidget(this);
   svgWidget->renderer()->load(m_formModel->svg().toUtf8());
-  ui->actorGeneralContainer->addWidget(svgWidget);
+  svgWidget->setFixedSize(512, 512);
+  ui->emojiContainer->addWidget(svgWidget);
+  ui->emojiContainer->setAlignment(Qt::AlignCenter);
 }
 
 void EmojiForm::setupUiInteraction() {

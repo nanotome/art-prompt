@@ -25,7 +25,7 @@
      <x>0</x>
      <y>0</y>
      <width>961</width>
-     <height>641</height>
+     <height>642</height>
     </rect>
    </property>
    <layout class="QVBoxLayout" name="mainFormLayout" stretch="1,0,0">
@@ -42,23 +42,7 @@
      <number>0</number>
     </property>
     <item>
-     <layout class="QVBoxLayout" name="actorGeneralContainer" stretch="">
-      <property name="spacing">
-       <number>0</number>
-      </property>
-      <property name="leftMargin">
-       <number>224</number>
-      </property>
-      <property name="topMargin">
-       <number>0</number>
-      </property>
-      <property name="rightMargin">
-       <number>224</number>
-      </property>
-      <property name="bottomMargin">
-       <number>0</number>
-      </property>
-     </layout>
+     <layout class="QHBoxLayout" name="emojiContainer"/>
     </item>
     <item>
      <spacer name="verticalSpacer">
@@ -94,7 +78,7 @@
        <number>8</number>
       </property>
       <item>
-       <spacer name="horizontalSpacer_3">
+       <spacer name="horizontalSpacer">
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
         </property>
