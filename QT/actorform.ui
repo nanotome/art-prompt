@@ -10,6 +10,12 @@
     <height>640</height>
    </rect>
   </property>
+  <property name="minimumSize">
+   <size>
+    <width>960</width>
+    <height>640</height>
+   </size>
+  </property>
   <property name="windowTitle">
    <string>ActorForm</string>
   </property>
@@ -22,9 +28,12 @@
      <height>641</height>
     </rect>
    </property>
-   <layout class="QVBoxLayout" name="mainFormLayout" stretch="0,0">
+   <layout class="QVBoxLayout" name="mainFormLayout" stretch="1,0,0">
     <property name="spacing">
-     <number>1</number>
+     <number>0</number>
+    </property>
+    <property name="sizeConstraint">
+     <enum>QLayout::SetMaximumSize</enum>
     </property>
     <property name="leftMargin">
      <number>0</number>
@@ -33,53 +42,64 @@
      <number>0</number>
     </property>
     <item>
-     <layout class="QHBoxLayout" name="formContentLayout" stretch="0,10">
+     <layout class="QVBoxLayout" name="actorGeneralContainer" stretch="">
       <property name="spacing">
-       <number>6</number>
+       <number>0</number>
       </property>
       <property name="leftMargin">
+       <number>224</number>
+      </property>
+      <property name="topMargin">
        <number>0</number>
       </property>
       <property name="rightMargin">
+       <number>224</number>
+      </property>
+      <property name="bottomMargin">
        <number>0</number>
       </property>
-      <item>
-       <spacer name="horizontalSpacer">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item>
-       <layout class="QVBoxLayout" name="actorGeneralContainer">
-        <property name="spacing">
-         <number>1</number>
-        </property>
-        <property name="leftMargin">
-         <number>0</number>
-        </property>
-        <property name="bottomMargin">
-         <number>0</number>
-        </property>
-        <item>
-         <widget class="QGraphicsView" name="emojiView"/>
-        </item>
-       </layout>
-      </item>
      </layout>
     </item>
     <item>
-     <layout class="QHBoxLayout" name="emojiActionButtons">
+     <spacer name="verticalSpacer">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+      <property name="sizeType">
+       <enum>QSizePolicy::Fixed</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>20</width>
+        <height>4</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="emojiActionButtons" stretch="0,0,0">
+      <property name="spacing">
+       <number>8</number>
+      </property>
+      <property name="sizeConstraint">
+       <enum>QLayout::SetDefaultConstraint</enum>
+      </property>
+      <property name="leftMargin">
+       <number>8</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>8</number>
+      </property>
       <item>
        <spacer name="horizontalSpacer_3">
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::Expanding</enum>
         </property>
         <property name="sizeHint" stdset="0">
          <size>
