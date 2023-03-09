@@ -33,16 +33,21 @@ void EmojiForm::initializeForm() {
 
 void EmojiForm::setupUiInteraction() {
   connect(ui->emojiDoneButton, &QPushButton::clicked, this, [&]() {
-      m_formModel->markAsDone();
-      emojiView->renderer()->load(m_formModel->svg().toUtf8());
-      emojiView->update();
+      markEmojiAsDone();
+  });
+  connect(ui->emojiSkipButton, &QPushButton::clicked, this, [&]() {
+      skipEmoji();
   });
 }
 
-bool EmojiForm::markEmojiAsDone(){
-    return m_formModel->markAsDone();
+void EmojiForm::markEmojiAsDone(){
+    m_formModel->markAsDone();
+    emojiView->renderer()->load(m_formModel->svg().toUtf8());
+    emojiView->update();
 }
 
-void EmojiForm::isFormDirty() {
-
+void EmojiForm::skipEmoji() {
+    m_formModel->skip();
+    emojiView->renderer()->load(m_formModel->svg().toUtf8());
+    emojiView->update();
 }

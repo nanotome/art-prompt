@@ -20,7 +20,8 @@ public:
   explicit EmojiForm(QWidget *parent = nullptr);
   ~EmojiForm() override;
 
-  bool markEmojiAsDone();
+  void markEmojiAsDone();
+  void skipEmoji();
 
 private:
   Ui::EmojiForm *ui;
@@ -29,10 +30,6 @@ private:
   void initializeForm();
 
   Emoji *m_formModel;
-
-private slots:
-  void isFormDirty();
-
 };
 
 #endif //RPGDB_QT_ACTORFORM_H
