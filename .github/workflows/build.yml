@@ -57,7 +57,7 @@ jobs:
         run: |
           zip -r ranmoji-mac-build.zip ${{ runner.temp }}/build/*
       - name: (8) Save build artifact
-        uses: actions/upload-artifact@master
+        uses: actions/upload-artifact@v3
         with:
           name: ${{ env.ARTIFACT }}
-          path: ${{ runner.temp }}\${{ env.ARTIFACT }}
+          path: ${{ runner.temp }}/${{ env.ARTIFACT }}

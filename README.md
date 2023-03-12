@@ -1,3 +1,5 @@
+[![Mac Release](https://github.com/gnerkus/art-prompt/actions/workflows/build.yml/badge.svg)](https://github.com/gnerkus/art-prompt/actions/workflows/build.yml)
+
 # ranmoji
 
 Choose a random emoji from Twitter's emoji corpus. Written in C++ with QT.
