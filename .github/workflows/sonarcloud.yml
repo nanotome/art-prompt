@@ -1,0 +1,54 @@
+name: SonarCloud analysis
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    types: [opened, synchronize, reopened]
+defaults:
+  run:
+    shell: bash
+
+env:
+  SOURCE_DIR:   ${{ github.workspace }}
+
+jobs:
+  build:
+    name: Build
+    runs-on: macos-latest
+    env:
+      SONAR_SERVER_URL: "https://sonarcloud.io"
+      BUILD_WRAPPER_OUT_DIR: build_wrapper_output_directory # Directory where build-wrapper output will be placed
+    steps:
+      - name: (1) Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0 # Shallow clones should be disabled for a better relevancy of analysis
+      - name: (2) Install sonar-scanner and build-wrapper
+        uses: SonarSource/sonarcloud-github-c-cpp@v1
+      - name: (3) Install Qt
+        uses: jurplel/install-qt-action@v3
+        with:
+          version: '5.15.2'
+          host: 'mac'
+          target: 'desktop'
+          arch: 'clang_64'
+          dir: '${{github.workspace}}/qt/'
+          cache: 'true'
+          tools: 'tools_ifw tools_qtcreator,qt.tools.qtcreator'
+          extra: '--external 7z'
+      - name: (4) Create build directory
+        run:  mkdir ${{ runner.temp }}/build
+      - name: (5) Build
+        working-directory:  ${{ runner.temp }}/build
+        run: |
+          build-wrapper-macosx-x86 --out-dir ${{ env.BUILD_WRAPPER_OUT_DIR }} qmake ${{ env.SOURCE_DIR }}/RANMOJI.pro
+          make -j4
+      - name: (6) Run sonar-scanner
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: |
+          cp ${{ env.SOURCE_DIR }}/sonar-project.properties ${{ runner.temp }}/build
+          cd ${{ runner.temp }}/build
+          sonar-scanner --define sonar.host.url="${{ env.SONAR_SERVER_URL }}" --define sonar.cfamily.build-wrapper-output="${{ env.BUILD_WRAPPER_OUT_DIR }}"
