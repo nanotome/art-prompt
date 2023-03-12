@@ -11,6 +11,7 @@ defaults:
 
 env:
   SOURCE_DIR:   ${{ github.workspace }}
+  BUILD_WRAPPER_OUT_DIR: build_wrapper_output_directory
 
 jobs:
   build:
@@ -18,7 +19,6 @@ jobs:
     runs-on: macos-latest
     env:
       SONAR_SERVER_URL: "https://sonarcloud.io"
-      BUILD_WRAPPER_OUT_DIR: build_wrapper_output_directory # Directory where build-wrapper output will be placed
     steps:
       - name: (1) Checkout
         uses: actions/checkout@v3
@@ -49,6 +49,4 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
-          cp ${{ env.SOURCE_DIR }}/sonar-project.properties ${{ runner.temp }}/build
-          cd ${{ runner.temp }}/build
-          sonar-scanner --define sonar.host.url="${{ env.SONAR_SERVER_URL }}" --define sonar.cfamily.build-wrapper-output="${{ env.BUILD_WRAPPER_OUT_DIR }}"
+          sonar-scanner --define sonar.cfamily.build-wrapper-output="${{ env.BUILD_WRAPPER_OUT_DIR }}"
