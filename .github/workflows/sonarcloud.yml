@@ -11,7 +11,7 @@ defaults:
 
 env:
   SOURCE_DIR:   ${{ github.workspace }}
-  BUILD_WRAPPER_OUT_DIR: build_wrapper_output_directory
+  BUILD_WRAPPER_OUT_DIR: ${{ runner.temp }}/sonar_out
 
 jobs:
   build:
@@ -37,8 +37,10 @@ jobs:
           cache: 'true'
           tools: 'tools_ifw tools_qtcreator,qt.tools.qtcreator'
           extra: '--external 7z'
-      - name: (4) Create build directory
-        run:  mkdir ${{ runner.temp }}/build
+      - name: (4) Create output directories
+        run: |
+          mkdir ${{ runner.temp }}/build
+          mkdir ${{ runner.temp }}/sonar_out
       - name: (5) Build
         working-directory:  ${{ runner.temp }}/build
         run: |
