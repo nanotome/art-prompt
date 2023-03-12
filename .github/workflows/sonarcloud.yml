@@ -39,12 +39,14 @@ jobs:
       - name: (4) Create output directories
         run: |
           mkdir ${{runner.temp}}/build
+          mkdir ${{runner.temp}}/build/${{ env.BUILD_WRAPPER_OUT_DIR }}
       - name: (5) Build
         working-directory:  ${{runner.temp}}/build
         run: |
           qmake ${{ env.SOURCE_DIR }}/RANMOJI.pro
           build-wrapper-macosx-x86 --out-dir ${{ env.BUILD_WRAPPER_OUT_DIR }} make -j4
       - name: (6) Run sonar-scanner
+        working-directory:  ${{runner.temp}}/build
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
