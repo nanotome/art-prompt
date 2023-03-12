@@ -18,7 +18,6 @@ jobs:
     runs-on: macos-latest
     env:
       SONAR_SERVER_URL: "https://sonarcloud.io"
-      BUILD_WRAPPER_OUT_DIR: ${{ github.workspace }}/sonar_out
     steps:
       - name: (1) Checkout
         uses: actions/checkout@v3
@@ -39,15 +38,15 @@ jobs:
       - name: (4) Create output directories
         run: |
           mkdir ${{ runner.temp }}/build
-          mkdir ${{ github.workspace }}/sonar_out
       - name: (5) Build
         working-directory:  ${{ runner.temp }}/build
         run: |
-          build-wrapper-macosx-x86 --out-dir ${{ env.BUILD_WRAPPER_OUT_DIR }} qmake ${{ env.SOURCE_DIR }}/RANMOJI.pro
+          build-wrapper-macosx-x86 --out-dir ${{ runner.temp }} qmake ${{ env.SOURCE_DIR }}/RANMOJI.pro
           make -j4
       - name: (6) Run sonar-scanner
+        working-directory:  ${{ runner.temp }}/build
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
-          sonar-scanner --define sonar.cfamily.build-wrapper-output="${{ env.BUILD_WRAPPER_OUT_DIR }}"
+          sonar-scanner -X --define sonar.cfamily.build-wrapper-output="${{ runner.temp }}"
