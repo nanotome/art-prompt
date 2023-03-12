@@ -79,3 +79,6 @@ build-*
 # Notes
 notes
 
+# Intellij
+.idea
+
