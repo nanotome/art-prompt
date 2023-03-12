@@ -11,7 +11,7 @@ defaults:
 
 env:
   SOURCE_DIR:   ${{ github.workspace }}
-  BUILD_WRAPPER_OUT_DIR: ${{ github.workspace }}/sonar_out
+  BUILD_WRAPPER_OUT_DIR: sonar_out
 
 jobs:
   build:
@@ -40,7 +40,7 @@ jobs:
       - name: (4) Create output directories
         run: |
           mkdir ${{ runner.temp }}/build
-          mkdir ${{ github.workspace }}/sonar_out
+          mkdir sonar_out
       - name: (5) Build
         working-directory:  ${{ runner.temp }}/build
         run: |
