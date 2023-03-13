@@ -9,8 +9,7 @@
 
 class DatabaseManager {
 public:
-  DatabaseManager();
-  ~DatabaseManager();
+  DatabaseManager()=default;
 
   [[nodiscard]] bool isDatabaseOpen() const;
   QSqlDatabase getDatabase();

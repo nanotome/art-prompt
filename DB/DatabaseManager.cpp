@@ -10,13 +10,6 @@
 #include <QSqlDriver>
 #include <QCoreApplication>
 
-DatabaseManager::DatabaseManager() {
-}
-
-DatabaseManager::~DatabaseManager() {
-  _database.close();
-}
-
 bool DatabaseManager::initDatabase() {
     auto db = QSqlDatabase::addDatabase("QSQLITE");
     db.setDatabaseName(QCoreApplication::applicationDirPath() + "/ranmoji.db");
