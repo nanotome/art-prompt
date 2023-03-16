@@ -15,8 +15,8 @@ Emoji::Emoji() {
     m_emoji_id = "";
     m_svg = "";
     m_status = "NEW";
-    m_startedAt = *new QDateTime();
-    m_finishedAt = *new QDateTime();
+    m_startedAt = QDateTime();
+    m_finishedAt = QDateTime();
 }
 
 int Emoji::id() const {
@@ -164,6 +164,6 @@ void Emoji::resetEmoji() {
     m_emoji_id = "";
     m_svg = "";
     m_status = "NEW";
-    m_startedAt = *new QDateTime();
-    m_finishedAt = *new QDateTime();
+    m_startedAt = QDateTime();
+    m_finishedAt = QDateTime();
 }

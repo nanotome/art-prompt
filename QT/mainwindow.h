@@ -6,6 +6,7 @@
 #define RPGDB_QT_MAINWINDOW_H
 
 #include <QMainWindow>
+#include <memory>
 #include "actorform.h"
 
 QT_BEGIN_NAMESPACE
@@ -20,8 +21,8 @@ public:
   ~MainWindow() override;
 
 private:
-  Ui::MainWindow *ui;
-  EmojiForm *_emojiForm;
+  std::unique_ptr<Ui::MainWindow> ui;
+  std::unique_ptr<EmojiForm> _emojiForm;
 };
 
 #endif //RPGDB_QT_MAINWINDOW_H

@@ -10,18 +10,17 @@
 #include "../Models/Emoji.h"
 
 EmojiForm::EmojiForm(QWidget *parent) :
-    QWidget(parent), ui(new Ui::EmojiForm) {
-    Emoji* newEmoji = new Emoji();
-  m_formModel = newEmoji->nextEmoji();
+    QWidget(parent) {
+  ui = std::make_unique<Ui::EmojiForm>();
+  m_formModel = std::make_unique<Emoji>();
+    m_formModel->nextEmoji();
   ui->setupUi(this);
 
   setupUiInteraction();
   initializeForm();
 }
 
-EmojiForm::~EmojiForm() {
-  delete ui;
-}
+EmojiForm::~EmojiForm() = default;
 
 void EmojiForm::initializeForm() {
   emojiView = new QSvgWidget(this);
@@ -32,10 +31,10 @@ void EmojiForm::initializeForm() {
 }
 
 void EmojiForm::setupUiInteraction() {
-  connect(ui->emojiDoneButton, &QPushButton::clicked, this, [&]() {
+  connect(ui->emojiDoneButton, &QPushButton::clicked, this, [this]() {
       markEmojiAsDone();
   });
-  connect(ui->emojiSkipButton, &QPushButton::clicked, this, [&]() {
+  connect(ui->emojiSkipButton, &QPushButton::clicked, this, [this]() {
       skipEmoji();
   });
 }

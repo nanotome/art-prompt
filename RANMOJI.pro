@@ -12,14 +12,12 @@ CONFIG += c++17
 SOURCES += \
     main.cpp \
     DB/DatabaseManager.cpp \
-    DB/DatabaseUtils.cpp \
     QT/mainwindow.cpp \
     QT/actorform.cpp \
     Models/Emoji.cpp
 
 HEADERS += \
     DB/DatabaseManager.h \
-    DB/DatabaseUtils.h \
     QT/mainwindow.h \
     QT/actorform.h \
     Models/Emoji.h
