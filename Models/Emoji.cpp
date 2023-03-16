@@ -10,14 +10,11 @@
 
 #include "Emoji.h"
 
-Emoji::Emoji() {
-    m_id = 0;
-    m_emoji_id = "";
-    m_svg = "";
-    m_status = "NEW";
-    m_startedAt = QDateTime();
-    m_finishedAt = QDateTime();
-}
+Emoji::Emoji() :
+    m_id(0),
+    m_emoji_id(""),
+    m_svg(""),
+    m_status("NEW") {}
 
 int Emoji::id() const {
   return m_id;
@@ -54,9 +51,7 @@ Emoji* Emoji::markAsDone() {
   query.bindValue(":status", this->status());
   query.bindValue(":finishedAt", this->finishedAt());
 
-  auto queryExec = query.exec();
-
-  if (!queryExec) {
+  if (!query.exec()) {
     qWarning() << __func__ << ": " << query.lastError();
   } else {
     return nextEmoji();
@@ -105,9 +100,7 @@ Emoji Emoji::fetchCurrentEmoji() {
   query.bindValue(":id", this->id());
   query.bindValue(":status", "RUNNING");
 
-  auto queryExec = query.exec();
-
-  if (!queryExec) {
+  if (!query.exec()) {
 	qWarning() << __func__ << ": " << query.lastError();
   } else {
 	if (query.first()) {
@@ -127,9 +120,7 @@ Emoji Emoji::fetchNextEmoji() {
     query.prepare("SELECT * FROM jobs WHERE status = :status ORDER BY random() LIMIT 1");
     query.bindValue(":status", "NEW");
 
-    auto queryExec = query.exec();
-
-    if (!queryExec) {
+    if (!query.exec()) {
       qWarning() << __func__ << ": " << query.lastError();
     } else {
       if (query.first()) {
@@ -146,13 +137,11 @@ Emoji Emoji::emojiFromQuery(const QSqlQuery& query) {
   m_svg = query.value("svg").toString();
   m_status = query.value("status").toString();
 
-  QString startedAtFromDb = query.value("startedAt").toString();
-  if (startedAtFromDb != "") {
+  if (QString startedAtFromDb = query.value("startedAt").toString(); startedAtFromDb != "") {
     m_startedAt = QDateTime::fromString(query.value("startedAt").toString());
   }
 
-  QString finishedAtFromDb = query.value("finishedAt").toString();
-  if (finishedAtFromDb != "") {
+  if (QString finishedAtFromDb = query.value("finishedAt").toString(); finishedAtFromDb != "") {
      m_finishedAt = QDateTime::fromString(query.value("finishedAt").toString());
   }
 

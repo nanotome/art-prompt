@@ -12,8 +12,8 @@ public:
   DatabaseManager()=default;
 
   [[nodiscard]] bool isDatabaseOpen() const;
-  QSqlDatabase getDatabase();
-  bool initDatabase();
+  QSqlDatabase getDatabase() const;
+  bool initDatabase() const;
 private:
   QSqlDatabase _database;
 

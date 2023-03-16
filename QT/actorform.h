@@ -26,7 +26,7 @@ public:
 
 private:
   std::unique_ptr<Ui::EmojiForm> ui;
-  QSvgWidget *emojiView;
+  std::unique_ptr<QSvgWidget> emojiView;
   void setupUiInteraction();
   void initializeForm();
 
