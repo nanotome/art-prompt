@@ -36,9 +36,8 @@ void myMessageOutput(QtMsgType type, const QMessageLogContext &context, const QS
 int main(int argc, char *argv[]) {
   qInstallMessageHandler(myMessageOutput);
   QApplication a(argc, argv);
-  DatabaseManager dbManager;
 
-  if (!dbManager.initDatabase()) {
+  if (DatabaseManager dbManager; !dbManager.initDatabase()) {
 	qDebug() << "Database not open";
   }
 
