@@ -23,10 +23,10 @@ EmojiForm::EmojiForm(QWidget *parent) :
 EmojiForm::~EmojiForm() = default;
 
 void EmojiForm::initializeForm() {
-  emojiView = new QSvgWidget(this);
+    emojiView = std::make_unique<QSvgWidget>(this);
   emojiView->renderer()->load(m_formModel->svg().toUtf8());
   emojiView->setFixedSize(512, 512);
-  ui->emojiContainer->addWidget(emojiView);
+  ui->emojiContainer->addWidget(emojiView.get());
   ui->emojiContainer->setAlignment(Qt::AlignCenter);
 }
 
