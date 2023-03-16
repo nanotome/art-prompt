@@ -20,8 +20,7 @@ EmojiForm::EmojiForm(QWidget *parent) :
   initializeForm();
 }
 
-EmojiForm::~EmojiForm() {
-}
+EmojiForm::~EmojiForm() = default;
 
 void EmojiForm::initializeForm() {
   emojiView = new QSvgWidget(this);

@@ -8,14 +8,13 @@
 #include "ui_mainwindow.h"
 
 MainWindow::MainWindow(QWidget *parent) :
-	QMainWindow(parent), ui(new Ui::MainWindow) {
+    QMainWindow(parent) {
 
+    ui = std::make_unique<Ui::MainWindow>();
   ui->setupUi(this);
-  _emojiForm = new EmojiForm();
-  setCentralWidget(_emojiForm);
+  _emojiForm = std::make_unique<EmojiForm>();
+  setCentralWidget(_emojiForm.get());
 }
 
-MainWindow::~MainWindow() {
-  delete ui;
-}
+MainWindow::~MainWindow() = default;
 
