@@ -10,14 +10,11 @@
 
 #include "Emoji.h"
 
-Emoji::Emoji() {
-    m_id = 0;
-    m_emoji_id = "";
-    m_svg = "";
-    m_status = "NEW";
-    m_startedAt = QDateTime();
-    m_finishedAt = QDateTime();
-}
+Emoji::Emoji() :
+    m_id(0),
+    m_emoji_id(""),
+    m_svg(""),
+    m_status("NEW") {}
 
 int Emoji::id() const {
   return m_id;

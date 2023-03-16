@@ -47,13 +47,13 @@ int main(int argc, char *argv[]) {
   for (const QString &locale : uiLanguages) {
       const QString baseName = "test_" + QLocale(locale).name();
       if (translator.load(":/i18n/" + baseName)) {
-          a.installTranslator(&translator);
+          QApplication::installTranslator(&translator);
           break;
       }
   }
 
-  MainWindow w;
-  w.show();
+  MainWindow mainWindow;
+  mainWindow.show();
 
   return QApplication::exec();
 }
