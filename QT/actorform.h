@@ -7,6 +7,7 @@
 
 #include <QWidget>
 #include <QSvgWidget>
+#include <memory>
 #include "../Models/Emoji.h"
 
 QT_BEGIN_NAMESPACE
@@ -24,12 +25,12 @@ public:
   void skipEmoji();
 
 private:
-  Ui::EmojiForm *ui;
+  std::unique_ptr<Ui::EmojiForm> ui;
   QSvgWidget *emojiView;
   void setupUiInteraction();
   void initializeForm();
 
-  Emoji *m_formModel;
+  std::unique_ptr<Emoji> m_formModel;
 };
 
 #endif //RPGDB_QT_ACTORFORM_H

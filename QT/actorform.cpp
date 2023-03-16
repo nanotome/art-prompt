@@ -10,9 +10,10 @@
 #include "../Models/Emoji.h"
 
 EmojiForm::EmojiForm(QWidget *parent) :
-    QWidget(parent), ui(new Ui::EmojiForm) {
-    Emoji* newEmoji = new Emoji();
-  m_formModel = newEmoji->nextEmoji();
+    QWidget(parent) {
+  ui = std::make_unique<Ui::EmojiForm>();
+  m_formModel = std::make_unique<Emoji>();
+    m_formModel->nextEmoji();
   ui->setupUi(this);
 
   setupUiInteraction();
@@ -20,7 +21,6 @@ EmojiForm::EmojiForm(QWidget *parent) :
 }
 
 EmojiForm::~EmojiForm() {
-  delete ui;
 }
 
 void EmojiForm::initializeForm() {
