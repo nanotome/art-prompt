@@ -55,7 +55,7 @@ jobs:
       - name: (7) Zip build
         working-directory:  ${{ runner.temp }}
         run: |
-          zip -r ranmoji-mac-build.zip ${{ runner.temp }}/build/*
+          zip ranmoji-mac-build ${{ runner.temp }}/build/RANMOJI.app
       - name: (8) Save build artifact
         uses: actions/upload-artifact@v3
         with:
