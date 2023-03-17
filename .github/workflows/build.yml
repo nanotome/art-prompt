@@ -55,8 +55,7 @@ jobs:
       - name: (7) Zip build
         working-directory:  ${{ runner.temp }}
         run: |
-          hdiutil create tmp.dmg -ov -volname 'ranmoji' -fs HFS+ -srcfolder 'build/ranmoji.app'
-          hdiutil convert tmp.dmg -format UDZO -o ranmoji.dmg
+          macdeployqt build/ranmoji.app -dmg
       - name: (8) Save build artifact
         uses: actions/upload-artifact@v3
         with:
