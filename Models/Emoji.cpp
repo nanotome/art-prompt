@@ -6,11 +6,8 @@
 #include <QVariant>
 #include <QDebug>
 #include <utility>
-#include "../DB/DatabaseManager.h"
 
 #include "Emoji.h"
-
-Emoji::Emoji() {}
 
 int Emoji::id() const {
   return m_id;
@@ -39,8 +36,7 @@ QDateTime Emoji::finishedAt() const {
 void Emoji::markAsDone() {
     m_status = "FINISHED";
     m_finishedAt = QDateTime::currentDateTimeUtc();
-  DatabaseManager dbManager;
-  QSqlQuery query(dbManager.getDatabase());
+  QSqlQuery query(m_dbManager.getDatabase());
 
   query.prepare("UPDATE jobs SET finishedAt = :finishedAt, status = :status WHERE id = :id");
   query.bindValue(":id", this->id());
@@ -75,8 +71,7 @@ void Emoji::nextEmoji() {
     m_status = "RUNNING";
     m_startedAt = QDateTime::currentDateTimeUtc();
 
-    DatabaseManager dbManager;
-    QSqlQuery query(dbManager.getDatabase());
+    QSqlQuery query(m_dbManager.getDatabase());
 
     query.prepare("UPDATE jobs SET startedAt = :startedAt, status = :status WHERE id = :id");
     query.bindValue(":id", this->id());
@@ -85,8 +80,7 @@ void Emoji::nextEmoji() {
 }
 
 void Emoji::fetchCurrentEmoji() {
-  DatabaseManager dbManager;
-  QSqlQuery query(dbManager.getDatabase());
+  QSqlQuery query(m_dbManager.getDatabase());
 
   query.prepare("SELECT * FROM jobs WHERE id != :id AND status = :status LIMIT 1");
   query.bindValue(":id", this->id());
@@ -104,8 +98,7 @@ void Emoji::fetchCurrentEmoji() {
 }
 
 void Emoji::fetchNextEmoji() {
-    DatabaseManager dbManager;
-    QSqlQuery query(dbManager.getDatabase());
+    QSqlQuery query(m_dbManager.getDatabase());
 
     query.prepare("SELECT * FROM jobs WHERE status = :status ORDER BY random() LIMIT 1");
     query.bindValue(":status", "NEW");

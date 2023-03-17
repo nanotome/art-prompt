@@ -8,6 +8,7 @@
 #include <QString>
 #include <QDateTime>
 #include <QSqlQuery>
+#include "../DB/DatabaseManager.h"
 
 class Emoji {
 private:
@@ -17,8 +18,8 @@ private:
   QString m_status = "NEW";
   QDateTime m_startedAt;
   QDateTime m_finishedAt;
+  DatabaseManager m_dbManager;
 public:
-  Emoji();
   [[nodiscard]] int id() const;
   QString emojiId() const;
   [[nodiscard]] QString svg() const;
