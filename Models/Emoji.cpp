@@ -6,15 +6,8 @@
 #include <QVariant>
 #include <QDebug>
 #include <utility>
-#include "../DB/DatabaseManager.h"
 
 #include "Emoji.h"
-
-Emoji::Emoji() :
-    m_id(0),
-    m_emoji_id(""),
-    m_svg(""),
-    m_status("NEW") {}
 
 int Emoji::id() const {
   return m_id;
@@ -40,11 +33,10 @@ QDateTime Emoji::finishedAt() const {
     return m_finishedAt;
 }
 
-Emoji* Emoji::markAsDone() {
+void Emoji::markAsDone() {
     m_status = "FINISHED";
     m_finishedAt = QDateTime::currentDateTimeUtc();
-  DatabaseManager dbManager;
-  QSqlQuery query(dbManager.getDatabase());
+  QSqlQuery query(m_dbManager.getDatabase());
 
   query.prepare("UPDATE jobs SET finishedAt = :finishedAt, status = :status WHERE id = :id");
   query.bindValue(":id", this->id());
@@ -54,14 +46,12 @@ Emoji* Emoji::markAsDone() {
   if (!query.exec()) {
     qWarning() << __func__ << ": " << query.lastError();
   } else {
-    return nextEmoji();
+    nextEmoji();
   }
-
-  return {};
 }
 
-Emoji* Emoji::skip() {
-    return nextEmoji();
+void Emoji::skip() {
+    nextEmoji();
 }
 
 /**
@@ -71,7 +61,7 @@ Emoji* Emoji::skip() {
  * @brief Emoji::nextEmoji
  * @return
  */
-Emoji* Emoji::nextEmoji() {
+void Emoji::nextEmoji() {
     fetchCurrentEmoji();
 
     if (this->emojiId() == "") {
@@ -81,20 +71,20 @@ Emoji* Emoji::nextEmoji() {
     m_status = "RUNNING";
     m_startedAt = QDateTime::currentDateTimeUtc();
 
-    DatabaseManager dbManager;
-    QSqlQuery query(dbManager.getDatabase());
+    QSqlQuery query(m_dbManager.getDatabase());
 
     query.prepare("UPDATE jobs SET startedAt = :startedAt, status = :status WHERE id = :id");
     query.bindValue(":id", this->id());
     query.bindValue(":status", this->status());
     query.bindValue(":startedAt", this->startedAt());
 
-    return this;
+    if (!query.exec()) {
+        qWarning() << __func__ << ": " << query.lastError();
+    }
 }
 
-Emoji Emoji::fetchCurrentEmoji() {
-  DatabaseManager dbManager;
-  QSqlQuery query(dbManager.getDatabase());
+void Emoji::fetchCurrentEmoji() {
+  QSqlQuery query(m_dbManager.getDatabase());
 
   query.prepare("SELECT * FROM jobs WHERE id != :id AND status = :status LIMIT 1");
   query.bindValue(":id", this->id());
@@ -104,18 +94,15 @@ Emoji Emoji::fetchCurrentEmoji() {
 	qWarning() << __func__ << ": " << query.lastError();
   } else {
 	if (query.first()) {
-      return emojiFromQuery(query);
+      emojiFromQuery(query);
     } else {
         resetEmoji();
     }
   }
-
-  return {};
 }
 
-Emoji Emoji::fetchNextEmoji() {
-    DatabaseManager dbManager;
-    QSqlQuery query(dbManager.getDatabase());
+void Emoji::fetchNextEmoji() {
+    QSqlQuery query(m_dbManager.getDatabase());
 
     query.prepare("SELECT * FROM jobs WHERE status = :status ORDER BY random() LIMIT 1");
     query.bindValue(":status", "NEW");
@@ -124,28 +111,24 @@ Emoji Emoji::fetchNextEmoji() {
       qWarning() << __func__ << ": " << query.lastError();
     } else {
       if (query.first()) {
-        return emojiFromQuery(query);
+        emojiFromQuery(query);
       }
     }
-
-    return {};
 }
 
-Emoji Emoji::emojiFromQuery(const QSqlQuery& query) {
+void Emoji::emojiFromQuery(const QSqlQuery& query) {
   m_id = query.value("id").toInt();
   m_emoji_id = query.value("emoji_id").toString();
   m_svg = query.value("svg").toString();
   m_status = query.value("status").toString();
 
-  if (QString startedAtFromDb = query.value("startedAt").toString(); startedAtFromDb != "") {
+  if (const QString startedAtFromDb = query.value("startedAt").toString(); startedAtFromDb != "") {
     m_startedAt = QDateTime::fromString(query.value("startedAt").toString());
   }
 
-  if (QString finishedAtFromDb = query.value("finishedAt").toString(); finishedAtFromDb != "") {
+  if (const QString finishedAtFromDb = query.value("finishedAt").toString(); finishedAtFromDb != "") {
      m_finishedAt = QDateTime::fromString(query.value("finishedAt").toString());
   }
-
-  return *this;
 }
 
 void Emoji::resetEmoji() {
