@@ -10,11 +10,7 @@
 
 #include "Emoji.h"
 
-Emoji::Emoji() :
-    m_id(0),
-    m_emoji_id(""),
-    m_svg(""),
-    m_status("NEW") {}
+Emoji::Emoji() {}
 
 int Emoji::id() const {
   return m_id;
@@ -40,7 +36,7 @@ QDateTime Emoji::finishedAt() const {
     return m_finishedAt;
 }
 
-Emoji* Emoji::markAsDone() {
+void Emoji::markAsDone() {
     m_status = "FINISHED";
     m_finishedAt = QDateTime::currentDateTimeUtc();
   DatabaseManager dbManager;
@@ -54,14 +50,12 @@ Emoji* Emoji::markAsDone() {
   if (!query.exec()) {
     qWarning() << __func__ << ": " << query.lastError();
   } else {
-    return nextEmoji();
+    nextEmoji();
   }
-
-  return {};
 }
 
-Emoji* Emoji::skip() {
-    return nextEmoji();
+void Emoji::skip() {
+    nextEmoji();
 }
 
 /**
@@ -71,7 +65,7 @@ Emoji* Emoji::skip() {
  * @brief Emoji::nextEmoji
  * @return
  */
-Emoji* Emoji::nextEmoji() {
+void Emoji::nextEmoji() {
     fetchCurrentEmoji();
 
     if (this->emojiId() == "") {
@@ -88,11 +82,9 @@ Emoji* Emoji::nextEmoji() {
     query.bindValue(":id", this->id());
     query.bindValue(":status", this->status());
     query.bindValue(":startedAt", this->startedAt());
-
-    return this;
 }
 
-Emoji Emoji::fetchCurrentEmoji() {
+void Emoji::fetchCurrentEmoji() {
   DatabaseManager dbManager;
   QSqlQuery query(dbManager.getDatabase());
 
@@ -104,16 +96,14 @@ Emoji Emoji::fetchCurrentEmoji() {
 	qWarning() << __func__ << ": " << query.lastError();
   } else {
 	if (query.first()) {
-      return emojiFromQuery(query);
+      emojiFromQuery(query);
     } else {
         resetEmoji();
     }
   }
-
-  return {};
 }
 
-Emoji Emoji::fetchNextEmoji() {
+void Emoji::fetchNextEmoji() {
     DatabaseManager dbManager;
     QSqlQuery query(dbManager.getDatabase());
 
@@ -124,14 +114,12 @@ Emoji Emoji::fetchNextEmoji() {
       qWarning() << __func__ << ": " << query.lastError();
     } else {
       if (query.first()) {
-        return emojiFromQuery(query);
+        emojiFromQuery(query);
       }
     }
-
-    return {};
 }
 
-Emoji Emoji::emojiFromQuery(const QSqlQuery& query) {
+void Emoji::emojiFromQuery(const QSqlQuery& query) {
   m_id = query.value("id").toInt();
   m_emoji_id = query.value("emoji_id").toString();
   m_svg = query.value("svg").toString();
@@ -144,8 +132,6 @@ Emoji Emoji::emojiFromQuery(const QSqlQuery& query) {
   if (QString finishedAtFromDb = query.value("finishedAt").toString(); finishedAtFromDb != "") {
      m_finishedAt = QDateTime::fromString(query.value("finishedAt").toString());
   }
-
-  return *this;
 }
 
 void Emoji::resetEmoji() {
