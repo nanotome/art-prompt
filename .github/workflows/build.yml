@@ -45,7 +45,7 @@ jobs:
       - name: (5) Build
         working-directory:  ${{ runner.temp }}/build
         run: |
-          qmake ${{ env.SOURCE_DIR }}/RANMOJI.pro
+          qmake -config release ${{ env.SOURCE_DIR }}/RANMOJI.pro
           make -j4
       - name: (6) Set up SQLite DB
         working-directory:  ${{ runner.temp }}/build
@@ -55,9 +55,10 @@ jobs:
       - name: (7) Zip build
         working-directory:  ${{ runner.temp }}
         run: |
+          otool -L build/ranmoji.app/Contents/MacOS/ranmoji
           macdeployqt build/ranmoji.app -dmg
       - name: (8) Save build artifact
         uses: actions/upload-artifact@v3
         with:
           name: ${{ env.ARTIFACT }}
-          path: ${{ runner.temp }}/${{ env.ARTIFACT }}
+          path: ${{ runner.temp }}/build/${{ env.ARTIFACT }}
