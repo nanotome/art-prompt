@@ -12,12 +12,12 @@ defaults:
 env:
   SOURCE_DIR:   ${{ github.workspace }}
   QT_VERSION:   5.15.2
-  ARTIFACT:     ranmoji-mac-build.zip
+  ARTIFACT:     RANMOJI.dmg
 
 jobs:
   build:
     name: Build
-    runs-on: macos-latest
+    runs-on: macos-11
     env:
       BUILD_WRAPPER_OUT_DIR: build_wrapper_output_directory # Directory where build-wrapper output will be placed
     steps:
@@ -45,7 +45,7 @@ jobs:
       - name: (5) Build
         working-directory:  ${{ runner.temp }}/build
         run: |
-          qmake ${{ env.SOURCE_DIR }}/RANMOJI.pro
+          qmake -config release ${{ env.SOURCE_DIR }}/RANMOJI.pro
           make -j4
       - name: (6) Set up SQLite DB
         working-directory:  ${{ runner.temp }}/build
@@ -55,9 +55,9 @@ jobs:
       - name: (7) Zip build
         working-directory:  ${{ runner.temp }}
         run: |
-          zip -r ranmoji-mac-build.zip ${{ runner.temp }}/build/*
+          macdeployqt build/ranmoji.app -dmg
       - name: (8) Save build artifact
         uses: actions/upload-artifact@v3
         with:
           name: ${{ env.ARTIFACT }}
-          path: ${{ runner.temp }}/${{ env.ARTIFACT }}
+          path: ${{ runner.temp }}/build/${{ env.ARTIFACT }}

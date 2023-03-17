@@ -1,7 +1,7 @@
-QT       += core gui sql svg
+QT       += core gui
 qtHaveModule(opengl): QT += opengl
 
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets sql svg
 
 CONFIG += c++17
 
