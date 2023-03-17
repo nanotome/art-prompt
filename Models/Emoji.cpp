@@ -77,6 +77,10 @@ void Emoji::nextEmoji() {
     query.bindValue(":id", this->id());
     query.bindValue(":status", this->status());
     query.bindValue(":startedAt", this->startedAt());
+
+    if (!query.exec()) {
+        qWarning() << __func__ << ": " << query.lastError();
+    }
 }
 
 void Emoji::fetchCurrentEmoji() {
@@ -118,11 +122,11 @@ void Emoji::emojiFromQuery(const QSqlQuery& query) {
   m_svg = query.value("svg").toString();
   m_status = query.value("status").toString();
 
-  if (QString startedAtFromDb = query.value("startedAt").toString(); startedAtFromDb != "") {
+  if (const QString startedAtFromDb = query.value("startedAt").toString(); startedAtFromDb != "") {
     m_startedAt = QDateTime::fromString(query.value("startedAt").toString());
   }
 
-  if (QString finishedAtFromDb = query.value("finishedAt").toString(); finishedAtFromDb != "") {
+  if (const QString finishedAtFromDb = query.value("finishedAt").toString(); finishedAtFromDb != "") {
      m_finishedAt = QDateTime::fromString(query.value("finishedAt").toString());
   }
 }
