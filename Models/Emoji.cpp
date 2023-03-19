@@ -54,6 +54,14 @@ void Emoji::skip() {
     nextEmoji();
 }
 
+void Emoji::initialEmoji() {
+    fetchCurrentEmoji();
+
+    if (this->emojiId() == "") {
+        nextEmoji();
+    }
+}
+
 /**
  * Get the first emoji with a status of RUNNING. If none can be found, get
  * the first random emoji with a status of NEW.
@@ -62,11 +70,7 @@ void Emoji::skip() {
  * @return
  */
 void Emoji::nextEmoji() {
-    fetchCurrentEmoji();
-
-    if (this->emojiId() == "") {
-        fetchNextEmoji();
-    }
+    fetchNextEmoji();
 
     m_status = "RUNNING";
     m_startedAt = QDateTime::currentDateTimeUtc();
