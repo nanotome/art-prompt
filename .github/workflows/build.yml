@@ -78,7 +78,7 @@ jobs:
         working-directory:  ${{ runner.temp }}
         run: |
           macdeployqt build-darwin-debug/ranmoji.app -dmg -appstore-compliant
-          mv RANMOJI.dmg RANMOJI_debug.dmg
+          mv build-darwin-debug/RANMOJI.dmg build-darwin-debug/RANMOJI_debug.dmg
       - name: (12) Save debug artifact
         uses: actions/upload-artifact@v3
         with:
