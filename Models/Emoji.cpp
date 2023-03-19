@@ -44,7 +44,7 @@ void Emoji::markAsDone() {
   query.bindValue(":finishedAt", this->finishedAt().toString("yyyy-MM-dd hh:mm:ss"));
 
   if (!query.exec()) {
-    qWarning() << __func__ << ": " << query.lastError();
+    qCritical() << __func__ << ": " << query.lastError();
   } else {
     nextEmoji();
   }
@@ -83,7 +83,7 @@ void Emoji::nextEmoji() {
     query.bindValue(":startedAt", this->startedAt().toString("yyyy-MM-dd hh:mm:ss"));
 
     if (!query.exec()) {
-        qWarning() << __func__ << ": " << query.lastError();
+        qCritical() << __func__ << ": " << query.lastError();
     }
 }
 
