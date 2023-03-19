@@ -59,7 +59,7 @@ jobs:
         working-directory:  ${{ runner.temp }}
         run: |
           macdeployqt build-darwin-release/ranmoji.app -dmg
-      - name: (8) Save build artifact
+      - name: (8) Save release artifact
         uses: actions/upload-artifact@v3
         with:
           name: ${{ env.ARTIFACT }}
@@ -74,12 +74,12 @@ jobs:
         run: |
           cp ${{ env.SOURCE_DIR }}/ranmoji.sqlite ${{ runner.temp }}/build-darwin-debug/ranmoji.sqlite
           sqlite3 ./RANMOJI.app/Contents/MacOS/ranmoji.db < ./ranmoji.sqlite
-      - name: (7) Create deployable Debug build
+      - name: (11) Create deployable Debug build
         working-directory:  ${{ runner.temp }}
         run: |
-          macdeployqt -use-debug-libs build-darwin-release/ranmoji.app -dmg
+          macdeployqt -use-debug-libs -appstore-compliant build-darwin-release/ranmoji.app -dmg
           mv RANMOJI.dmb RANMOJI_debug.dmg
-      - name: (8) Save build artifact
+      - name: (12) Save debug artifact
         uses: actions/upload-artifact@v3
         with:
           name: ${{ env.DEBUG_ARTIFACT }}
