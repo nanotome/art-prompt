@@ -13,7 +13,7 @@ EmojiForm::EmojiForm(QWidget *parent) :
     QWidget(parent) {
   ui = std::make_unique<Ui::EmojiForm>();
   m_formModel = std::make_unique<Emoji>();
-    m_formModel->nextEmoji();
+    m_formModel->initialEmoji();
   ui->setupUi(this);
 
   setupUiInteraction();

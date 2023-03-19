@@ -30,6 +30,7 @@ public:
   void markAsDone();
   void skip();
   void nextEmoji();
+  void initialEmoji();
 
   void emojiFromQuery(const QSqlQuery& query);
   void fetchCurrentEmoji();

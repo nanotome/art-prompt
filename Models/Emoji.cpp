@@ -34,17 +34,17 @@ QDateTime Emoji::finishedAt() const {
 }
 
 void Emoji::markAsDone() {
-    m_status = "FINISHED";
-    m_finishedAt = QDateTime::currentDateTimeUtc();
+  m_status = "FINISHED";
+  m_finishedAt = QDateTime::currentDateTimeUtc();
   QSqlQuery query(m_dbManager.getDatabase());
 
   query.prepare("UPDATE jobs SET finishedAt = :finishedAt, status = :status WHERE id = :id");
   query.bindValue(":id", this->id());
   query.bindValue(":status", this->status());
-  query.bindValue(":finishedAt", this->finishedAt());
+  query.bindValue(":finishedAt", this->finishedAt().toString("yyyy-MM-dd hh:mm:ss"));
 
   if (!query.exec()) {
-    qWarning() << __func__ << ": " << query.lastError();
+    qCritical() << __func__ << ": " << query.lastError();
   } else {
     nextEmoji();
   }
@@ -52,6 +52,14 @@ void Emoji::markAsDone() {
 
 void Emoji::skip() {
     nextEmoji();
+}
+
+void Emoji::initialEmoji() {
+    fetchCurrentEmoji();
+
+    if (this->emojiId() == "") {
+        nextEmoji();
+    }
 }
 
 /**
@@ -62,11 +70,7 @@ void Emoji::skip() {
  * @return
  */
 void Emoji::nextEmoji() {
-    fetchCurrentEmoji();
-
-    if (this->emojiId() == "") {
-        fetchNextEmoji();
-    }
+    fetchNextEmoji();
 
     m_status = "RUNNING";
     m_startedAt = QDateTime::currentDateTimeUtc();
@@ -76,10 +80,10 @@ void Emoji::nextEmoji() {
     query.prepare("UPDATE jobs SET startedAt = :startedAt, status = :status WHERE id = :id");
     query.bindValue(":id", this->id());
     query.bindValue(":status", this->status());
-    query.bindValue(":startedAt", this->startedAt());
+    query.bindValue(":startedAt", this->startedAt().toString("yyyy-MM-dd hh:mm:ss"));
 
     if (!query.exec()) {
-        qWarning() << __func__ << ": " << query.lastError();
+        qCritical() << __func__ << ": " << query.lastError();
     }
 }
 
