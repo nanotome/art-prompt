@@ -41,7 +41,7 @@ void Emoji::markAsDone() {
   query.prepare("UPDATE jobs SET finishedAt = :finishedAt, status = :status WHERE id = :id");
   query.bindValue(":id", this->id());
   query.bindValue(":status", this->status());
-  query.bindValue(":finishedAt", this->finishedAt());
+  query.bindValue(":finishedAt", this->finishedAt().toString("yyyy-MM-dd hh:mm:ss"));
 
   if (!query.exec()) {
     qWarning() << __func__ << ": " << query.lastError();
@@ -80,7 +80,7 @@ void Emoji::nextEmoji() {
     query.prepare("UPDATE jobs SET startedAt = :startedAt, status = :status WHERE id = :id");
     query.bindValue(":id", this->id());
     query.bindValue(":status", this->status());
-    query.bindValue(":startedAt", this->startedAt());
+    query.bindValue(":startedAt", this->startedAt().toString("yyyy-MM-dd hh:mm:ss"));
 
     if (!query.exec()) {
         qWarning() << __func__ << ": " << query.lastError();
