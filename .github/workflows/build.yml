@@ -46,7 +46,7 @@ jobs:
         working-directory:  ${{ runner.temp }}/build
         run: |
           qmake -config release ${{ env.SOURCE_DIR }}/RANMOJI.pro
-          make -j4
+          make all
       - name: (6) Set up SQLite DB
         working-directory:  ${{ runner.temp }}/build
         run: |

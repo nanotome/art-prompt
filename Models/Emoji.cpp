@@ -34,8 +34,8 @@ QDateTime Emoji::finishedAt() const {
 }
 
 void Emoji::markAsDone() {
-    m_status = "FINISHED";
-    m_finishedAt = QDateTime::currentDateTimeUtc();
+  m_status = "FINISHED";
+  m_finishedAt = QDateTime::currentDateTimeUtc();
   QSqlQuery query(m_dbManager.getDatabase());
 
   query.prepare("UPDATE jobs SET finishedAt = :finishedAt, status = :status WHERE id = :id");
