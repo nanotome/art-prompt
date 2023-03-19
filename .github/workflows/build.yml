@@ -13,6 +13,7 @@ env:
   SOURCE_DIR:   ${{ github.workspace }}
   QT_VERSION:   5.15.2
   ARTIFACT:     RANMOJI.dmg
+  DEBUG_ARTIFACT: RANMOJI_debug.dmg
 
 jobs:
   build:
@@ -40,24 +41,46 @@ jobs:
           cache: 'true'
           tools: 'tools_ifw tools_qtcreator,qt.tools.qtcreator'
           extra: '--external 7z'
-      - name: (4) Create build directory
-        run:  mkdir ${{ runner.temp }}/build
-      - name: (5) Build
-        working-directory:  ${{ runner.temp }}/build
+      - name: (4) Create build directories
+        run:  |
+          mkdir ${{ runner.temp }}/build-darwin-debug
+          mkdir ${{ runner.temp }}/build-darwin-release
+      - name: (5) Build Release
+        working-directory:  ${{ runner.temp }}/build-darwin-release
         run: |
-          qmake -config release ${{ env.SOURCE_DIR }}/RANMOJI.pro
-          make all
-      - name: (6) Set up SQLite DB
-        working-directory:  ${{ runner.temp }}/build
+          qmake CONFIG+=release ${{ env.SOURCE_DIR }}/RANMOJI.pro
+          make -j4
+      - name: (6) Set up Release SQLite DB
+        working-directory:  ${{ runner.temp }}/build-darwin-release
         run: |
-          cp ${{ env.SOURCE_DIR }}/ranmoji.sqlite ${{ runner.temp }}/build/ranmoji.sqlite
+          cp ${{ env.SOURCE_DIR }}/ranmoji.sqlite ${{ runner.temp }}/build-darwin-release/ranmoji.sqlite
           sqlite3 ./RANMOJI.app/Contents/MacOS/ranmoji.db < ./ranmoji.sqlite
-      - name: (7) Zip build
+      - name: (7) Create deployable Release build
         working-directory:  ${{ runner.temp }}
         run: |
-          macdeployqt build/ranmoji.app -dmg
+          macdeployqt build-darwin-release/ranmoji.app -dmg
       - name: (8) Save build artifact
         uses: actions/upload-artifact@v3
         with:
           name: ${{ env.ARTIFACT }}
-          path: ${{ runner.temp }}/build/${{ env.ARTIFACT }}
+          path: ${{ runner.temp }}/build-darwin-release/${{ env.ARTIFACT }}
+      - name: (9) Build Debug
+        working-directory:  ${{ runner.temp }}/build-darwin-debug
+        run: |
+          qmake CONFIG+=debug ${{ env.SOURCE_DIR }}/RANMOJI.pro
+          make -j4
+      - name: (10) Set up Debug SQLite DB
+        working-directory:  ${{ runner.temp }}/build-darwin-debug
+        run: |
+          cp ${{ env.SOURCE_DIR }}/ranmoji.sqlite ${{ runner.temp }}/build-darwin-debug/ranmoji.sqlite
+          sqlite3 ./RANMOJI.app/Contents/MacOS/ranmoji.db < ./ranmoji.sqlite
+      - name: (7) Create deployable Debug build
+        working-directory:  ${{ runner.temp }}
+        run: |
+          macdeployqt -use-debug-libs build-darwin-release/ranmoji.app -dmg
+          mv RANMOJI.dmb RANMOJI_debug.dmg
+      - name: (8) Save build artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ env.DEBUG_ARTIFACT }}
+          path: ${{ runner.temp }}/build-darwin-debug/${{ env.DEBUG_ARTIFACT }}

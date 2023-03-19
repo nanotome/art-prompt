@@ -30,7 +30,6 @@ TRANSLATIONS += \
     ranmoji_ja_JP.ts
 CONFIG += lrelease
 CONFIG += embed_translations
-CONFIG += debug_and_release
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
