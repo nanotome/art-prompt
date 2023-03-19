@@ -54,7 +54,7 @@ jobs:
         working-directory:  ${{ runner.temp }}/build-darwin-release
         run: |
           cp ${{ env.SOURCE_DIR }}/ranmoji.sqlite ${{ runner.temp }}/build-darwin-release/ranmoji.sqlite
-          chmod og+w RANMOJI.app/Contents/MacOS
+          chmod -R og+w RANMOJI.app
           sqlite3 ./RANMOJI.app/Contents/MacOS/ranmoji.db < ./ranmoji.sqlite
       - name: (7) Create deployable Release build
         working-directory:  ${{ runner.temp }}
@@ -74,7 +74,7 @@ jobs:
         working-directory:  ${{ runner.temp }}/build-darwin-debug
         run: |
           cp ${{ env.SOURCE_DIR }}/ranmoji.sqlite ${{ runner.temp }}/build-darwin-debug/ranmoji.sqlite
-          chmod og+w RANMOJI.app/Contents/MacOS
+          chmod -R og+w RANMOJI.app
           sqlite3 ./RANMOJI.app/Contents/MacOS/ranmoji.db < ./ranmoji.sqlite
       - name: (11) Create deployable Debug build
         working-directory:  ${{ runner.temp }}
