@@ -34,8 +34,7 @@ void myMessageOutput(QtMsgType type, const QMessageLogContext &context, const QS
 }
 
 int main(int argc, char *argv[]) {
-  // TODO: reenable the message handler
-    //qInstallMessageHandler(myMessageOutput);
+  qInstallMessageHandler(myMessageOutput);
   QApplication a(argc, argv);
 
   if (DatabaseManager dbManager; !dbManager.initDatabase()) {

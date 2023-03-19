@@ -55,6 +55,9 @@ jobs:
         run: |
           cp ${{ env.SOURCE_DIR }}/ranmoji.sqlite ${{ runner.temp }}/build-darwin-release/ranmoji.sqlite
           sqlite3 ./RANMOJI.app/Contents/MacOS/ranmoji.db < ./ranmoji.sqlite
+          whoami
+          id
+          ls -al RANMOJI.app/Contents/MacOS
       - name: (7) Create deployable Release build
         working-directory:  ${{ runner.temp }}
         run: |
