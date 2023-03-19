@@ -32,12 +32,10 @@ void EmojiForm::initializeForm() {
 
 void EmojiForm::setupUiInteraction() {
   connect(ui->emojiDoneButton, &QPushButton::clicked, this, [this]() {
-      // TEMP: debugging
-      skipEmoji();
+      markEmojiAsDone();
   });
   connect(ui->emojiSkipButton, &QPushButton::clicked, this, [this]() {
-      // TEMP: debugging
-      markEmojiAsDone();
+      skipEmoji();
   });
 }
 
